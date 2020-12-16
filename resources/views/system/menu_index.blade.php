@@ -1,12 +1,12 @@
 @include('base/basehead')
 <script type="text/javascript">
     $("document").ready(function() {
-        var configurl_table = '/menu_index_tabledata';
-        var configurl_add = '/menu_add';
-        var configurl_add_exec = '/menu_add_exec';
-        var configurl_update = '/menu_update';
+        var configurl_table       = '/menu_index_tabledata';
+        var configurl_add         = '/menu_add';
+        var configurl_add_exec    = '/menu_add_exec';
+        var configurl_update      = '/menu_update';
         var configurl_update_exec = '/menu_update_exec';
-        var configurl_delete = '/menu_delete';
+        var configurl_delete      = '/menu_delete';
 
         form.render(); //表单渲染
         //表格渲染
@@ -42,15 +42,15 @@
                 }, {
                     field: 'showmenuname',
                     title: '菜单名称',
-                    width: 180
+                    width: 200
                 }, {
                     field: 'menupath',
                     title: '菜单路径',
-                    width: 150
+                    width: 260
                 }, {
                     field: 'rolenamestr',
                     title: '关联角色名',
-                    width: 220
+                    width: 260
                 }, {
                     field: 'orderbyid',
                     title: 'desc排序',
