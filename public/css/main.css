@@ -1,0 +1,42 @@
+.mainbody {
+    background-color: #f2f2f2;
+}
+.layui-table-tool {
+    background-color: #ffffff;
+}
+.layui-container-tab {
+    position: relative;
+    padding: 12px 12px 20px 12px;
+    margin: 10px;
+    background-color: rgb(255, 255, 255);
+    border: 1px solid rgb(242, 242, 242);
+    border-radius: 5px;
+}
+.disabled-color {
+    background-color: rgb(242, 242, 242);
+}
+.layui-form-search .layui-form-label {
+    padding: 0 8px;
+    height: 32px;
+    line-height: 30px;
+}
+.layui-form-search .layui-form-item {
+    margin-bottom: 8px;
+    clear: both;
+}
+.layui-form-search .layui-input-inline input,
+.layui-form-search .layui-input-inline select {
+    width: 100%;
+    height: 32px;
+    padding: 2px 8px;
+    line-height: 1em;
+}
+.layui-form-search .layui-input-inline {
+    width: 170px;
+}
+.layui-elem-field-search legend{
+    font-size: 12px;
+}
+.layui-elem-field-search .layui-field-box{
+    padding: 8px 15px 0px 8px;
+}
