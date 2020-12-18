@@ -139,7 +139,7 @@ class ZzAuth
             }
         }
 
-        $log->warning(date('Y-m-d H:i:s') . '---' . comm_getip() . '---' . session(SESS_USERNAME, '') . '---' . $user_moreclientkey . '---' . $classname . '---' . $functionname . '---' . $checknodename . '---' . $errmsg);
+        $log->warning(date('Y-m-d H:i:s') . '---' . comm_getip() . '---' . session(SESS_USERNAME, '') . '---' . session(SESS_MORECKEY, '') . '---' . $classname . '---' . $functionname . '---' . $checknodename . '---' . $errmsg);
         return $resval;
     }
 
