@@ -12,7 +12,6 @@
         <h3 style="color: #1E9FFF;font-weight:bold;">当前用户账号信息</h3>
         <hr class="layui-bg-gray">
         <div class="layui-row">
-            <!-- <div class="layui-col-md6"> -->
                 <table class="layui-table">
                     <colgroup>
                         <col width="150">
@@ -55,7 +54,41 @@
                         <td> <a href="https://www.msg8.site/" target="_blank" style="color:blue;">好网址导航</a></td>
                     </tr>
                 </table>
-            <!-- </div> -->
+        </div>
+        <br><br>
+        <h3 style="color: #1E9FFF;font-weight:bold;">系统参数配置信息</h3>
+        <hr class="layui-bg-gray">
+        <div class="layui-row">
+                <table class="layui-table">
+                    <colgroup>
+                        <col width="150">
+                        <col>
+                    </colgroup>
+                    <tr>
+                        <td style="text-align: right;">平台名称</td>
+                        <td>{{COMM_SYSNAME}}</td>
+                    </tr>
+                    <tr>
+                        <td style="text-align: right;">调试模式</td>
+                        <td>{{(true===(bool) env('APP_DEBUG', false))?'开启':'关闭'}}</td>
+                    </tr>
+                    <tr>
+                        <td style="text-align: right;">IP检测类型</td>
+                        <td>{{(true===COMM_SECIP)?'双层IP检测':'单层IP检测'}}</td>
+                    </tr>
+                    <tr>
+                        <td style="text-align: right;">验证码类型</td>
+                        <td>{{('google'==COMM_CODETYPE)?'谷歌动态码':'图形验证码'}}</td>
+                    </tr>
+                    <tr>
+                        <td style="text-align: right;">github地址</td>
+                        <td> <a href="https://github.com/msg8-site/xlaravel" target="_blank" style="color:blue;">xlaravel-github</a></td>
+                    </tr>
+                    <tr>
+                        <td style="text-align: right;">gitee地址</td>
+                        <td> <a href="https://gitee.com/msg8-site/xlaravel" target="_blank" style="color:blue;">xlaravel-gitee</a></td>
+                    </tr>
+                </table>
         </div>
     </div>
     </div>
