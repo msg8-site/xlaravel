@@ -41,6 +41,7 @@
                 }, {
                     field: 'username',
                     title: '用户名',
+                    fixed: 'left',
                     width: 130
                 }, {
                     field: 'userip',
@@ -53,15 +54,15 @@
                 }, {
                     field: 'cudnclassname',
                     title: '操作对应类名',
-                    width: 145
+                    width: 160
                 }, {
                     field: 'cudnfunctionname',
                     title: '操作对应函数名',
-                    width: 220
+                    width: 200
                 }, {
                     field: 'tablename',
                     title: '操作数据表名称',
-                    width: 145
+                    width: 140
                 }, {
                     field: 'tableid',
                     title: '数据表ID',
@@ -73,7 +74,7 @@
                 }, {
                     field: 'cudndata',
                     title: '操作数据记录',
-                    width: 800
+                    width: 1200
                 }]
             ]
         });

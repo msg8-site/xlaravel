@@ -226,7 +226,7 @@ class ZzAuth
                                 //更新最新的登陆时间和IP到数据库
                                 $dbarr = [];
                                 $dbarr['update_datetime'] = date('Y-m-d H:i:s');
-                                $dbarr['moreclientkey'] = uniqid() . mt_rand(10000, 99999);
+                                $dbarr['moreclientkey'] = strrev(uniqid()) . mt_rand(10000, 99999);
                                 $r = DB::table('sys_user')->where('username', $user_username)->update($dbarr);
                                 if (!$r) {
                                     $showmsg = '【错误】系统内部，请稍后重试';

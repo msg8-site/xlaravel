@@ -7,7 +7,7 @@
         var configurl_update      = '/user_update';
         var configurl_update_exec = '/user_update_exec';
         var configurl_delete      = '/user_delete';
-        
+
         form.render(); //表单渲染
         //表格渲染
         var table = layui.table;
@@ -52,14 +52,6 @@
                     title: '用户昵称',
                     width: 100
                 }, {
-                    field: 'useremail',
-                    title: '用户邮箱',
-                    width: 80
-                }, {
-                    field: 'userphone',
-                    title: '用户手机号',
-                    width: 80
-                }, {
                     field: 'usergooglekey',
                     title: '谷歌动态码',
                     width: 80
@@ -72,6 +64,14 @@
                     title: '客户端标识',
                     width: 150
                 }, {
+                    field: 'useremail',
+                    title: '用户邮箱',
+                    width: 120
+                }, {
+                    field: 'userphone',
+                    title: '用户手机号',
+                    width: 120
+                }, {
                     field: 'create_datetime',
                     title: '创建时间',
                     width: 145
@@ -82,14 +82,15 @@
                 }, {
                     field: 'backup1',
                     title: '备用1',
-                    width: 80
+                    width: 150
                 }, {
                     field: 'backup2',
                     title: '备用2',
-                    width: 80
+                    width: 150
                 }, {
                     field: 'backup3',
-                    title: '备用3'
+                    title: '备用3',
+                    width: 150
                 }]
             ]
         });
