@@ -50,6 +50,8 @@ class SysMenu extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists($this->tablename);
+        if (true === COMM_DBLOCK) {
+            Schema::dropIfExists($this->tablename);
+        }
     }
 }
