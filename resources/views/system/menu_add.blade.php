@@ -77,7 +77,7 @@
         @if ('' != ($resarr['errmsg'] ?? ''))
         <h2>{{ $resarr['errmsg'] ?? '' }}</h2>
         @else
-        <h3 style="color: #1E9FFF;font-weight:bold;">菜单添加</h3>
+        <h3 style="color: #1E9FFF;font-weight:bold;">菜单数据添加</h3>
         <hr class="layui-bg-gray">
         <form class="layui-form layui-form-pane" action="">
             <div class="layui-form-item">

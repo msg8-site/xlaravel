@@ -209,7 +209,7 @@ class UserController extends Controller
         if (!is_numeric($reqarr['id'] ?? '')) {
             $resarr['errmsg'] = '【错误】非法操作，未匹配到对应数据';
         } else {
-            $DB = DB::table($this->tablename)->select('id', 'status', 'role', 'username', 'nickname', 'useremail', 'userphone', 'usergooglekey', 'create_datetime', 'update_datetime', 'moreclientflag', 'moreclientkey', 'backup1', 'backup2', 'backup3');
+            $DB = DB::table($this->tablename)->select('id', 'status', 'role', 'username', 'nickname', 'useremail', 'userphone', 'usergooglekey', 'create_datetime', 'update_datetime', 'moreclientflag', 'moreclientkey', 'backup1', 'backup2', 'backup3', 'uplockid');
             $dbobj = $DB->where('id', ($reqarr['id'] ?? '0'))->first();
             if (empty($dbobj)) {
                 $resarr['errmsg'] = '【错误】未找到对应数据';
@@ -248,6 +248,7 @@ class UserController extends Controller
         $resarr = [];
 
         $validator = Validator::make($reqarr, [
+            'uplockid'       => 'bail|required|numeric',
             'id'             => 'bail|required|integer',
             'role'           => 'bail|required|integer',
             'status'         => 'bail|required|integer',
@@ -260,9 +261,12 @@ class UserController extends Controller
         $olddbobj = DB::table($this->tablename)->where('id', ($reqarr['id'] ?? 0))->first();
         if (empty($olddbobj)) {
             return cmd(400, '【错误】数据不存在，无法修改');
+        } else if (($reqarr['uplockid'] ?? '') != ($olddbobj->uplockid ?? '')) {
+            return cmd(400, '【错误】数据发生改动，请刷新数据修改页面，获取最新数据后重新执行修改操作');
         } else {
             $errmsg = '';
             $dbarr = [];
+            $dbarr['uplockid']        = date('ymdHis') . mt_rand(100000, 999999);
             $dbarr['role']            = $reqarr['role'] ?? '0';
             $dbarr['status']          = $reqarr['status'] ?? '0';
             $dbarr['nickname']        = $reqarr['nickname'] ?? '';
@@ -274,7 +278,7 @@ class UserController extends Controller
             $dbarr['backup3']         = $reqarr['backup3'] ?? '';
             $dbarr['update_datetime'] = date('Y-m-d H:i:s');
             if ('root' == $olddbobj->username ?? '') {
-                $dbarr['status'] = '1';
+                $dbarr['status']   = '1';
                 $dbarr['nickname'] = '超级管理员';
             }
             if ('on' == ($reqarr['resetpasswd'] ?? '')) {

@@ -74,12 +74,13 @@
             <button type="button" id="refreshIframe" class="layui-btn layui-btn-sm">刷新页面</button>
         </div>
         <hr class="layui-bg-gray">
-        <h3 style="color: #1E9FFF;font-weight:bold;">用户数据修改</h3>
+        <h3 style="color: #1E9FFF;font-weight:bold;">菜单数据修改</h3>
         <hr class="layui-bg-gray">
         @if ('' != ($resarr['errmsg'] ?? ''))
         <h2>{{ $resarr['errmsg'] ?? '' }}</h2>
         @else
         <form class="layui-form layui-form-pane" action="">
+            <input type="hidden" name="uplockid" value="{{$resarr['data']['uplockid'] ?? '0'}}">
             <div class="layui-form-item">
                 <label class="layui-form-label">标识ID</label>
                 <div class="layui-input-block">

@@ -80,6 +80,7 @@
         <h2>{{ $resarr['errmsg'] ?? '' }}</h2>
         @else
         <form class="layui-form layui-form-pane" action="">
+            <input type="hidden" name="uplockid" value="{{$resarr['data']['uplockid'] ?? '0'}}">
             <div class="layui-form-item">
                 <label class="layui-form-label">标识ID</label>
                 <div class="layui-input-block">

@@ -252,6 +252,7 @@ class MenuController extends Controller
         $resarr = [];
 
         $validator = Validator::make($reqarr, [
+            'uplockid'  => 'bail|required|numeric',
             'id'        => 'bail|required|integer',
             'orderbyid' => 'bail|required|integer',
             'menuname'  => 'bail|required|between:1,64',
@@ -263,12 +264,15 @@ class MenuController extends Controller
         $olddbobj = DB::table($this->tablename)->where('id', ($reqarr['id'] ?? 0))->first();
         if (empty($olddbobj)) {
             return cmd(400, '【错误】数据不存在，无法修改');
+        } else if (($reqarr['uplockid'] ?? '') != ($olddbobj->uplockid ?? '')) {
+            return cmd(400, '【错误】数据发生改动，请刷新数据修改页面，获取最新数据后重新执行修改操作');
         } else {
             if ('0' === (string)($olddbobj->fid ?? '')) {
                 $reqarr['menupath'] = '';
             }
 
             $dbarr                    = [];
+            $dbarr['uplockid']        = date('ymdHis') . mt_rand(100000, 999999);
             $dbarr['menuname']        = $reqarr['menuname'] ?? '';
             $dbarr['menupath']        = $reqarr['menupath'] ?? '';
             $dbarr['orderbyid']       = $reqarr['orderbyid'] ?? '';

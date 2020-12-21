@@ -117,7 +117,7 @@ class RoleController extends Controller
             $nodelist = [];
             $cutflag = false;
             foreach ($dbobj as $vald) {
-                if('IndexController'==($vald->classname??'')) {
+                if ('IndexController' == ($vald->classname ?? '')) {
                     $vald->tsmsg = '建议勾选';
                 }
                 if (false === $cutflag) {
@@ -233,7 +233,7 @@ class RoleController extends Controller
                     $nodelist = [];
                     $cutflag = false;
                     foreach ($dbobj as $vald) {
-                        if('IndexController'==($vald->classname??'')) {
+                        if ('IndexController' == ($vald->classname ?? '')) {
                             $vald->tsmsg = '建议勾选';
                         }
                         if (in_array($vald->id, $hasnodearr)) {
@@ -274,6 +274,7 @@ class RoleController extends Controller
         $resarr = [];
 
         $validator = Validator::make($reqarr, [
+            'uplockid'   => 'bail|required|numeric',
             'id'         => 'bail|required|integer',
             'selectnode' => 'bail|nullable|array',
             'selectmenu' => 'bail|nullable|array',
@@ -285,9 +286,12 @@ class RoleController extends Controller
         $olddbobj = DB::table($this->tablename)->where('id', ($reqarr['id'] ?? 0))->first();
         if (empty($olddbobj)) {
             return cmd(400, '【错误】数据不存在，无法修改');
+        } else if (($reqarr['uplockid'] ?? '') != ($olddbobj->uplockid ?? '')) {
+            return cmd(400, '【错误】数据发生改动，请刷新数据修改页面，获取最新数据后重新执行修改操作');
         } else {
             $errmsg = '';
             $dbarr = [];
+            $dbarr['uplockid']        = date('ymdHis') . mt_rand(100000, 999999);
             $dbarr['rolename']        = $reqarr['rolename'] ?? '';
             $dbarr['nodeidstr']       = (is_array($reqarr['selectnode'] ?? '') && count($reqarr['selectnode'] ?? '') > 0) ? implode(',', $reqarr['selectnode'] ?? []) : '';
             $dbarr['menuidstr']       = (is_array($reqarr['selectmenu'] ?? '') && count($reqarr['selectmenu'] ?? '') > 0) ? implode(',', $reqarr['selectmenu'] ?? []) : '';
