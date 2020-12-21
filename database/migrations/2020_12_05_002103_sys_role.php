@@ -25,6 +25,7 @@ class SysRole extends Migration
                 $table->dateTime('create_datetime')->default('2000-01-01 00:00:00')->comment('创建时间');
                 $table->dateTime('update_datetime')->default('2000-01-01 00:00:00')->comment('更新时间');
                 $table->string('backup1', 64)->default('')->comment('备用字段1');
+                $table->unsignedBigInteger('uplockid')->default('1')->comment('更新冲突锁id');
             });
         }
     }

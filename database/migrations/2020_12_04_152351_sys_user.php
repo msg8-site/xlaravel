@@ -36,6 +36,7 @@ class SysUser extends Migration
                 $table->string('backup1', 64)->default('')->comment('备用字段1');
                 $table->string('backup2', 64)->default('')->comment('备用字段2');
                 $table->string('backup3', 64)->default('')->comment('备用字段3');
+                $table->unsignedBigInteger('uplockid')->default('1')->comment('更新冲突锁id');
             });
             //初始化插入root数据
             DB::table($this->tablename)->insert([
