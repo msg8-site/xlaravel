@@ -38,6 +38,7 @@ class SysMenu extends Migration
                 ['id' => '6', 'fid' => '1', 'menuname' => '登陆日志', 'menupath' => 'loguserlogin_index', 'orderbyid' => '700', 'create_datetime' => date('Y-m-d H:i:s'), 'backup1' => '初始化数据'],
                 ['id' => '7', 'fid' => '1', 'menuname' => '动态码日志', 'menupath' => 'logcodecheck_index', 'orderbyid' => '700', 'create_datetime' => date('Y-m-d H:i:s'), 'backup1' => '初始化数据'],
                 ['id' => '8', 'fid' => '1', 'menuname' => '数据操作日志', 'menupath' => 'logdatabasecudn_index', 'orderbyid' => '700', 'create_datetime' => date('Y-m-d H:i:s'), 'backup1' => '初始化数据'],
+                ['id' => '9', 'fid' => '1', 'menuname' => '开发参考样例', 'menupath' => 'example_index', 'orderbyid' => '600', 'create_datetime' => date('Y-m-d H:i:s'), 'backup1' => '初始化数据'],
             ]);
         }
     }

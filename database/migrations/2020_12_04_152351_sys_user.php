@@ -21,7 +21,7 @@ class SysUser extends Migration
         if (!Schema::hasTable($this->tablename)) {
             Schema::create($this->tablename, function (Blueprint $table) {
                 $table->bigIncrements('id')->comment('用户表-自增主键ID');
-                $table->tinyInteger('status')->default('0')->comment('用户状态，1开启，2停用，4禁用，0锁定');
+                $table->tinyInteger('status')->default('0')->comment('用户状态，1开启，2关闭，4禁用，0锁定');
                 $table->unsignedBigInteger('role')->default('0')->comment('角色表对应id');
                 $table->string('username', 64)->default('')->comment('用户名')->unique('username');
                 $table->string('nickname', 64)->default('')->comment('用户昵称姓名');
