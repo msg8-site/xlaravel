@@ -34,5 +34,19 @@
                     'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
                 }
             });
+            $('#refreshPage').click(function() {
+                layer.load();
+                window.location.reload();
+            });
+            $('#gotoTop').click(function() {
+                $("html,body").animate({
+                    scrollTop: 0
+                }, 20);
+            });
+            $('#gotoBottom').click(function() {
+                $('html,body').animate({
+                    scrollTop: $(document).height()
+                }, 20);
+            });
         }
     </script>

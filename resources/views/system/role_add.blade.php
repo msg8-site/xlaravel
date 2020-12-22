@@ -8,9 +8,6 @@
         $('#closeIframe').click(function() {
             parent.layer.close(iframeindex);
         });
-        $('#refreshIframe').click(function() {
-            window.location.reload();
-        });
 
         //监听提交
         form.on('submit(formtable)', function(formdata) {
@@ -142,13 +139,15 @@
 
 <body class="mainbody">
     <div class="layui-container-tab">
-        <div class="layui-row">
-            <button type="button" id="closeIframe" class="layui-btn layui-btn-sm">关闭当前页面</button>
-            <button type="button" id="refreshIframe" class="layui-btn layui-btn-sm">刷新页面</button>
+        <div class="layui-row topfloatbar">
+            <button type="button" class="layui-btn layui-btn-primary layui-btn-sm topfloatbar-title" disabled>标题：角色数据添加</button>
+            <button type="button" id="closeIframe" class="layui-btn layui-btn-danger layui-btn-sm">关闭当前页面</button>
+            <button type="button" id="refreshPage" class="layui-btn layui-btn-normal layui-btn-sm">刷新页面</button>
+            <button type="button" id="gotoTop" class="layui-btn layui-btn-sm">前往顶部</button>
+            <button type="button" id="gotoBottom" class="layui-btn layui-btn-sm">前往底部</button>
+            <hr class="layui-bg-gray">
         </div>
-        <hr class="layui-bg-gray">
-        <h3 style="color: #1E9FFF;font-weight:bold;">角色数据添加</h3>
-        <hr class="layui-bg-gray">
+
         <form class="layui-form layui-form-pane" action="">
             <div class="layui-form-item">
                 <label class="layui-form-label">角色名称</label>

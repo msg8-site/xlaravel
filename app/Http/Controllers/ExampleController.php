@@ -255,9 +255,7 @@ class ExampleController extends Controller
         if (empty($olddbobj)) {
             return cmd(400, '【错误】数据不存在，无法删除');
         } else {
-            if ('root' == $olddbobj->username ?? '') {
-                return cmd(400, '【错误】root账号受系统保护，无法删除');
-            } else if ('1' == $olddbobj->status ?? '') {
+            if ('1' == $olddbobj->status ?? '') {
                 return cmd(400, '【错误】状态为开启的数据不可删除');
             } else {
                 $resdel = DB::table($this->tablename)->where('id', ($reqarr['id'] ?? 0))->delete();
