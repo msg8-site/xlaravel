@@ -9,6 +9,7 @@
     "license": "MIT",
     "require": {
         "php": "^7.2.5|^8.0",
+        "erusev/parsedown": "^1.7",
         "fideloper/proxy": "^4.4",
         "laravel-lang/lang": "~5.0",
         "laravel/framework": "^6.20",

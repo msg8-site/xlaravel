@@ -88,3 +88,13 @@ Route::post('example_add_exec', 'ExampleController@add_exec');
 Route::get('example_update', 'ExampleController@update');
 Route::post('example_update_exec', 'ExampleController@update_exec');
 Route::post('example_delete', 'ExampleController@delete');
+
+//文档管理
+Route::get('markdown_docshow', 'MarkdownController@docshow');
+Route::get('markdown_index', 'MarkdownController@index');
+Route::get('markdown_index_tabledata', 'MarkdownController@index_tabledata');
+Route::get('markdown_add', 'MarkdownController@add');
+Route::post('markdown_add_exec', 'MarkdownController@add_exec');
+Route::get('markdown_update', 'MarkdownController@update');
+Route::post('markdown_update_exec', 'MarkdownController@update_exec');
+Route::post('markdown_delete', 'MarkdownController@delete');
