@@ -185,9 +185,9 @@
                     <table class="layui-table" lay-size="sm">
                         <colgroup>
                             <col width="10">
-                            <col width="150">
-                            <col width="150">
-                            <col width="220">
+                            <col width="200">
+                            <col width="260">
+                            <col width="200">
                             <col width="320">
                             <col>
                         </colgroup>

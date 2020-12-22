@@ -16,48 +16,52 @@
         $(".icon-search-clear").click(function() {
             $("#fastsearch").val('');
             $("#fastsearch").focus();
+            tosearch();
         });
         $("#fastsearch").keypress(function(e) {
             if (e.which == 13) {
                 $("#fastsearch").blur();
-                searchval = $("#fastsearch").val();
-
-                var iload = parent.xlayer.load(); //开启等待加载层
-                //处理逻辑
-                $.ajax({
-                    type: "POST",
-                    async: true,
-                    url: "/markdown_search",
-                    data: 'searchval=' + encodeURIComponent(searchval),
-                    success: function(res) {
-                        let resc = (typeof res.c == "undefined") ? -1 : res.c;
-                        let resm = (typeof res.m == "undefined") ? '' : res.m;
-                        let resd = (typeof res.d == "undefined") ? {} : res.d;
-                        if (200 == resc) {
-                            $("#markdownmenulist").html(resd);
-                        } else {
-                            parent.xlayer.alert(resm.replace(/\n/g, "<br>"));
-                        }
-                    },
-                    error: function(res) {
-                        try {
-                            let resmessage = res.responseJSON.message;
-                            if ('' != resmessage) {
-                                parent.xlayer.alert('<span style="color:red;">【错误】数据请求出错，请稍后重试<br>' + resmessage + '</span>');
-                            }
-                        } catch (error) {
-                            parent.xlayer.alert('<span style="color:red;">【错误】数据请求出错，请稍后重试</span>');
-                        }
-                    },
-                    complete: function() {
-                        parent.xlayer.close(iload); //关闭等待加载层
-                    }
-                });
+                tosearch();
             }
         });
 
 
     });
+
+    function tosearch() {
+        searchval = $("#fastsearch").val();
+        var iload = parent.xlayer.load(); //开启等待加载层
+        //处理逻辑
+        $.ajax({
+            type: "POST",
+            async: true,
+            url: "/markdown_search",
+            data: 'searchval=' + encodeURIComponent(searchval),
+            success: function(res) {
+                let resc = (typeof res.c == "undefined") ? -1 : res.c;
+                let resm = (typeof res.m == "undefined") ? '' : res.m;
+                let resd = (typeof res.d == "undefined") ? {} : res.d;
+                if (200 == resc) {
+                    $("#markdownmenulist").html(resd);
+                } else {
+                    parent.xlayer.alert(resm.replace(/\n/g, "<br>"));
+                }
+            },
+            error: function(res) {
+                try {
+                    let resmessage = res.responseJSON.message;
+                    if ('' != resmessage) {
+                        parent.xlayer.alert('<span style="color:red;">【错误】数据请求出错，请稍后重试<br>' + resmessage + '</span>');
+                    }
+                } catch (error) {
+                    parent.xlayer.alert('<span style="color:red;">【错误】数据请求出错，请稍后重试</span>');
+                }
+            },
+            complete: function() {
+                parent.xlayer.close(iload); //关闭等待加载层
+            }
+        });
+    }
 </script>
 </head>
 <style>
