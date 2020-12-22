@@ -90,6 +90,13 @@ Route::post('example_update_exec', 'ExampleController@update_exec');
 Route::post('example_delete', 'ExampleController@delete');
 
 //文档管理
+Route::get('markdown_childiframe', 'MarkdownController@childiframe');
+Route::get('markdown_leftmenu', 'MarkdownController@leftmenu');
+Route::post('markdown_search', 'MarkdownController@search');
+Route::get('markdown_rightbody', 'MarkdownController@rightbody');
+Route::post('markdown_backup_exec', 'MarkdownController@backup_exec');
+Route::post('markdown_recovery_exec', 'MarkdownController@recovery_exec');
+
 Route::get('markdown_docshow', 'MarkdownController@docshow');
 Route::get('markdown_index', 'MarkdownController@index');
 Route::get('markdown_index_tabledata', 'MarkdownController@index_tabledata');

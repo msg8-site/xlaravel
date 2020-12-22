@@ -5,6 +5,9 @@
         var iframeindex = parent.layer.getFrameIndex(window.name); //获取窗口索引
         form.render(); //表单渲染
 
+        if('undefined'==(typeof iframeindex)) {
+            $('#closeIframe').hide();
+        }
         $('#closeIframe').click(function() {
             parent.layer.close(iframeindex);
         });
@@ -76,6 +79,14 @@
         </div>
 
         <form class="layui-form layui-form-pane" action="">
+            <div class="layui-form-item">
+                <label class="layui-form-label">文档类型</label>
+                <div class="layui-input-block">
+                    <select name="flag" id="flag" lay-verify="required">
+                        {!! $resarr['option_flag'] ?? '' !!}
+                    </select>
+                </div>
+            </div>
             <div class="layui-form-item">
                 <label class="layui-form-label">文档名称</label>
                 <div class="layui-input-block">

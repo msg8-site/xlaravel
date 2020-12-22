@@ -19,6 +19,7 @@ class DocMarkdown extends Migration
         if (!Schema::hasTable($this->tablename)) {
             Schema::create($this->tablename, function (Blueprint $table) {
                 $table->bigIncrements('id')->comment('文档管理-自增主键ID');
+                $table->tinyInteger('flag')->default('2')->comment('类型，1开放，2封闭');
                 $table->string('docname', 64)->default('')->comment('文档名称')->unique('docname');
                 $table->string('typename', 64)->default('')->comment('类别名称');
                 $table->bigInteger('orderbyid')->default('100')->comment('排序规则，desc,默认100');

@@ -1,13 +1,15 @@
 @include('base/basehead')
 <script type="text/javascript">
     $("document").ready(function() {
-        var configurl_table       = '/markdown_index_tabledata';
-        var configurl_add         = '/markdown_add';
-        var configurl_add_exec    = '/markdown_add_exec';
-        var configurl_update      = '/markdown_update';
+        var configurl_table = '/markdown_index_tabledata';
+        var configurl_add = '/markdown_add';
+        var configurl_add_exec = '/markdown_add_exec';
+        var configurl_update = '/markdown_update';
         var configurl_update_exec = '/markdown_update_exec';
-        var configurl_delete      = '/markdown_delete';
-        var configurl_docshow     = '/markdown_docshow';
+        var configurl_delete = '/markdown_delete';
+        var configurl_docshow = '/markdown_docshow';
+        var configurl_backup = '/markdown_backup_exec';
+        var configurl_recovery = '/markdown_recovery_exec';
 
         form.render(); //表单渲染
         //表格渲染
@@ -36,6 +38,10 @@
                     field: 'id',
                     title: 'ID',
                     width: 80
+                }, {
+                    field: 'flag_show',
+                    title: '状态',
+                    width: 70
                 }, {
                     field: 'docname',
                     title: '文档名称',
@@ -73,6 +79,89 @@
                     area: ['100%', '100%'],
                     content: configurl_add + "?configurl_add_exec=" + encodeURIComponent(configurl_add_exec)
                 });
+            } else if ('tabletoolbar_backup' == obj.event) {
+                xlayer.confirm('确认执行备份操作吗？执行备份时请耐心等待备份完成', {
+                    btn: ['确认', '取消']
+                }, function(index) {
+                    xlayer.close(index); //关闭弹框
+                    var iload = xlayer.load(); //开启等待加载层
+                    //处理逻辑
+                    $.ajax({
+                        type: "POST",
+                        async: true,
+                        url: configurl_backup,
+                        data: 'backup=yes',
+                        success: function(res) {
+                            let resc = (typeof res.c == "undefined") ? -1 : res.c;
+                            let resm = (typeof res.m == "undefined") ? '' : res.m;
+                            let resd = (typeof res.d == "undefined") ? {} : res.d;
+                            if (200 == resc) {
+                                xlayer.alert(resm);
+                            } else {
+                                xlayer.alert(resm.replace(/\n/g, "<br>"));
+                            }
+                        },
+                        error: function(res) {
+                            try {
+                                let resmessage = res.responseJSON.message;
+                                if ('' != resmessage) {
+                                    xlayer.alert('<span style="color:red;">【错误】数据请求出错，请稍后重试<br>' + resmessage + '</span>');
+                                }
+                            } catch (error) {
+                                xlayer.alert('<span style="color:red;">【错误】数据请求出错，请稍后重试</span>');
+                            }
+                        },
+                        complete: function() {
+                            xlayer.close(iload); //关闭等待加载层
+                        }
+                    });
+                }, function() {
+                    xlayer.msg('已取消');
+                });
+            } else if ('tabletoolbar_recovery' == obj.event) {
+                xlayer.prompt({
+                    value: '',
+                    title: '请输入恢复文件夹名称'
+                }, function(value, index) {
+                    xlayer.close(index); //关闭弹框
+                    var iload = xlayer.load(); //开启等待加载层
+                    //处理逻辑
+                    $.ajax({
+                        type: "POST",
+                        async: true,
+                        url: configurl_recovery,
+                        data: 'recoverydirname='+encodeURIComponent(value),
+                        success: function(res) {
+                            let resc = (typeof res.c == "undefined") ? -1 : res.c;
+                            let resm = (typeof res.m == "undefined") ? '' : res.m;
+                            let resd = (typeof res.d == "undefined") ? {} : res.d;
+                            if (200 == resc) {
+                                xlayer.alert(resm, {
+                                    end: function() {
+                                        layui.table.reload('tabledatalist');
+                                    }
+                                });
+                            } else {
+                                xlayer.alert(resm.replace(/\n/g, "<br>"));
+                            }
+                        },
+                        error: function(res) {
+                            try {
+                                let resmessage = res.responseJSON.message;
+                                if ('' != resmessage) {
+                                    xlayer.alert('<span style="color:red;">【错误】数据请求出错，请稍后重试<br>' + resmessage + '</span>');
+                                }
+                            } catch (error) {
+                                xlayer.alert('<span style="color:red;">【错误】数据请求出错，请稍后重试</span>');
+                            }
+                        },
+                        complete: function() {
+                            xlayer.close(iload); //关闭等待加载层
+                        }
+                    });
+                }, function() {
+                    xlayer.msg('已取消');
+                });
             } else {}
         });
 
@@ -86,7 +175,8 @@
                     area: ['100%', '100%'],
                     content: configurl_docshow + '?id=' + obj.data.id
                 });
-            } if ('tablelinetoolbar_update' == obj.event) {
+            }
+            if ('tablelinetoolbar_update' == obj.event) {
                 layer.open({
                     type: 2,
                     title: '<span style="font-weight:bold;">【弹出层】数据操作窗口界面</span>',
@@ -170,6 +260,14 @@
                 <div class="layui-field-box">
                     <form class="layui-form layui-form-pane layui-form-search" action="">
                         <div class="layui-form-item">
+                            <label class="layui-form-label">文档类型</label>
+                            <div class="layui-input-inline">
+                                <select name="status" id="status">
+                                    <option value="">请选择</option>
+                                    <option value="1">开放</option>
+                                    <option value="2">封闭</option>
+                                </select>
+                            </div>
                             <label class="layui-form-label">唯一标识ID</label>
                             <div class="layui-input-inline">
                                 <input type="text" name="id" maxlength="18" placeholder="唯一标识ID" autocomplete="off" class="layui-input">
@@ -195,6 +293,8 @@
         </div>
         <script type="text/html" id="lefttoolbar">
             <a class="layui-btn layui-btn-sm layui-btn-normal" lay-event="tabletoolbar_add">添加</a>
+            <a class="layui-btn layui-btn-sm layui-btn-normal" lay-event="tabletoolbar_backup">备份</a>
+            <a class="layui-btn layui-btn-sm layui-btn-normal" lay-event="tabletoolbar_recovery">备份恢复</a>
         </script>
         <script type="text/html" id="tablelinetoolbar">
             <a class="layui-btn layui-btn-xs layui-btn-normal" lay-event="tablelinetoolbar_select">查看</a>

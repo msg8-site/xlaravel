@@ -4,7 +4,10 @@
         //注意：parent 是 JS 自带的全局对象，可用于操作父页面
         var iframeindex = parent.layer.getFrameIndex(window.name); //获取窗口索引
         form.render(); //表单渲染
-
+        
+        if('undefined'==(typeof iframeindex)) {
+            $('#closeIframe').hide();
+        }
         $('#closeIframe').click(function() {
             parent.layer.close(iframeindex);
         });

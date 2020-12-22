@@ -5,6 +5,9 @@
         var iframeindex = parent.layer.getFrameIndex(window.name); //获取窗口索引
         form.render(); //表单渲染
 
+        if('undefined'==(typeof iframeindex)) {
+            $('#closeIframe').hide();
+        }
         $('#closeIframe').click(function() {
             parent.layer.close(iframeindex);
         });

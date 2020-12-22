@@ -57,7 +57,12 @@ function comm_ccoption($chkval = '', $arrc = [], $hassel = true)
                 '1' => '1-单终端',
                 '2' => '2-多终端',
             ];
-        }
+        }else if ('openclose' == $arrc) {
+            $myarr = [
+                '1' => '1-开放',
+                '2' => '2-封闭',
+            ];
+        } 
     }
     foreach ($myarr as $keym => $valm) {
         $optionmy .= '<option value="' . $keym . '" ';

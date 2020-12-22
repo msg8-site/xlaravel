@@ -81,6 +81,19 @@
     color:orangered;
     
 }
+.icon-search-clear {
+    font-size: 28px;
+    position: absolute;
+    right:3px;
+    top: 5px;
+    z-index: 999;
+    color: red;
+}
+.icon-search-clear:hover{
+    color: orange;
+}
+
+
 /*markdown文档格式css*/
 .markdown {
     font-family: "Avenir Next", Helvetica, Arial, sans-serif;

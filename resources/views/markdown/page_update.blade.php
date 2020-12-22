@@ -4,7 +4,10 @@
         //注意：parent 是 JS 自带的全局对象，可用于操作父页面
         var iframeindex = parent.layer.getFrameIndex(window.name); //获取窗口索引
         form.render(); //表单渲染
-
+        
+        if('undefined'==(typeof iframeindex)) {
+            $('#closeIframe').hide();
+        }
         $('#closeIframe').click(function() {
             parent.layer.close(iframeindex);
         });
@@ -84,6 +87,14 @@
                 <label class="layui-form-label">标识ID</label>
                 <div class="layui-input-block">
                     <input type="text" name="id" id="id" lay-verify="required" autocomplete="off" placeholder="" class="layui-input disabled-color" disabled value="{{ $resarr['data']['id'] ?? '' }}">
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label">文档类型</label>
+                <div class="layui-input-block">
+                    <select name="flag" id="flag" lay-verify="required">
+                        {!! $resarr['data']['option_flag'] ?? '' !!}
+                    </select>
                 </div>
             </div>
             <div class="layui-form-item">
