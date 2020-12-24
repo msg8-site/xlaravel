@@ -36,7 +36,7 @@
         $.ajax({
             type: "POST",
             async: true,
-            url: "/markdown_search",
+            url: "/publicdoc_search",
             data: 'searchval=' + encodeURIComponent(searchval),
             success: function(res) {
                 let resc = (typeof res.c == "undefined") ? -1 : res.c;
@@ -87,7 +87,7 @@
                             @if (count($menulist[$keym])>0)
                             <dl class="layui-nav-child">
                                 @foreach ($menulist[$keym] as $keymc => $valmc)
-                                <dd><a class="childmenuname" href="markdown_docshow?id={{ $valmc[1] }}" target="iframeright">{{ $valmc[0] }}</a></dd>
+                                <dd><a class="childmenuname" href="publicdoc_docshow?id={{ $valmc[1] }}" target="iframeright">{{ $valmc[0] }}</a></dd>
                                 @endforeach
                             </dl>
                             @endif

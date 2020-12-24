@@ -8,7 +8,6 @@ use Illuminate\Support\Facades\DB;
 use App\Libraries\ZzAuth;
 use App\Rules\zd_alpha;
 use App\Rules\zd_alnum;
-use Illuminate\Contracts\Cache\Store;
 use \Parsedown;
 use Illuminate\Support\Facades\Storage;
 
@@ -49,6 +48,50 @@ class MarkdownController extends Controller
 
         return view(($this->viewarray[__FUNCTION__] ?? 'system/error'), ['reqarr' => $reqarr, 'resarr' => $resarr]);
     }
+    /**
+     * @authcheckname=>子框架菜单
+     * @authcheckshow=>1
+     */
+    public function leftmenu(Request $request)
+    {
+        if (true !== ZzAuth::check_auth(__CLASS__, __FUNCTION__, $resmsg)) {
+            return $resmsg;
+        }
+        $reqarr = $request->all();
+        $resarr = [];
+
+        $menulist = [];
+        $DB = DB::table($this->tablename)->select('id', 'flag', 'docname', 'typename', 'orderbyid');
+        $dbobj = $DB->orderBy('typename', 'asc')->orderBy('orderbyid', 'desc')->get();
+        if (!empty($dbobj)) {
+            foreach ($dbobj as $valm) {
+                $tmp_id = $valm->id ?? '';
+                $tmp_docname = $valm->docname ?? '';
+                $tmp_typename = $valm->typename ?? '';
+                if (!isset($menulist[$tmp_typename])) {
+                    $menulist[$tmp_typename] = [];
+                }
+                array_push($menulist[$tmp_typename], [$tmp_docname, $tmp_id, $tmp_typename]);
+            }
+        }
+
+        return view(($this->viewarray[__FUNCTION__] ?? 'system/error'), ['menulist' => $menulist]);
+    }
+
+    /**
+     * @authcheckname=>子框架主页
+     * @authcheckshow=>1
+     */
+    public function rightbody(Request $request)
+    {
+        if (true !== ZzAuth::check_auth(__CLASS__, __FUNCTION__, $resmsg)) {
+            return $resmsg;
+        }
+        $reqarr = $request->all();
+        $resarr = [];
+        echo '<h1 style="margin:30px;">请点击左侧菜单查看文档</h1>';
+    }
+
     /**
      * @authcheckname=>搜索
      * @authcheckshow=>2
@@ -98,150 +141,10 @@ class MarkdownController extends Controller
             $showhtml .= '</li>';
         }
         return cmd(200, '数据添加成功', $showhtml);
-        // return view(($this->viewarray[__FUNCTION__] ?? 'system/error'), ['menulist' => $menulist]);
     }
 
     /**
-     * @authcheckname=>备份-执行
-     * @authcheckshow=>2
-     */
-    public function backup_exec(Request $request)
-    {
-        if (true !== ZzAuth::check_auth(__CLASS__, __FUNCTION__, $resmsg)) {
-            return $resmsg;
-        }
-        $reqarr = $request->all();
-        $resarr = [];
-        if ('yes' != ($reqarr['backup'] ?? '')) {
-            return cmd(400, '【错误】非法操作，备份校验参数不正确');
-        }
-
-        $count_sum = 0;
-        $count_suc = 0;
-        $count_err = 0;
-        $DB = DB::table($this->tablename);
-        $DB->orderBy('id')->chunk(50, function ($dbobj) use (&$count_sum, &$count_suc, &$count_err) {
-            foreach ($dbobj as $vald) {
-                ++$count_sum;
-                $backuppath = 'markdownback_' . date('Ymd') . '/' . ($vald->typename ?? '') . '_' . ($vald->docname ?? '') . '.md';
-                $backupdata = $vald->content ?? '';
-                $r = Storage::put($backuppath, $backupdata);
-                if ($r) {
-                    ++$count_suc;
-                } else {
-                    ++$count_err;
-                }
-            }
-        });
-        return cmd(200, '数据备份执行完成--总数：' . $count_sum . '，成功：' . $count_suc . '，失败：' . $count_err);
-    }
-    /**
-     * @authcheckname=>备份恢复-执行
-     * @authcheckshow=>2
-     */
-    public function recovery_exec(Request $request)
-    {
-        if (true !== ZzAuth::check_auth(__CLASS__, __FUNCTION__, $resmsg)) {
-            return $resmsg;
-        }
-        $reqarr = $request->all();
-        $resarr = [];
-        if ('' == ($reqarr['recoverydirname'] ?? '')) {
-            return cmd(400, '【错误】恢复对应文件夹名称不能为空');
-        }
-        if (true !== Storage::exists(($reqarr['recoverydirname'] ?? ''))) {
-            return cmd(400, '【错误】恢复对应文件夹名称不存在');
-        } else {
-            $filesarr = Storage::files(($reqarr['recoverydirname'] ?? ''));
-            if (!is_array($filesarr) || count($filesarr) <= 0) {
-                return cmd(400, '【错误】恢复对应文件夹下没有对应恢复文件');
-            } else {
-                $count_sum = 0;
-                $count_suc = 0;
-                $count_err = 0;
-                $count_has = 0;
-                foreach ($filesarr as $valf) {
-                    ++$count_sum;
-                    $tmp_filename = rtrim(basename($valf), '.md');
-                    $tmparr = explode('_', $tmp_filename, 2);
-                    $tmp_typename = $tmparr[0] ?? '';
-                    $tmp_docname = $tmparr[1] ?? '';
-                    $tmp_content = Storage::get($valf);
-
-                    $dbobj = DB::table($this->tablename)->where('docname', $tmp_docname)->first();
-                    if (!empty($dbobj)) {
-                        ++$count_has;
-                    } else {
-                        $dbarr = [];
-                        $dbarr['flag']            = '2';
-                        $dbarr['docname']         = $tmp_docname;
-                        $dbarr['typename']        = $tmp_typename;
-                        $dbarr['orderbyid']       = '100';
-                        $dbarr['content']         = $tmp_content;
-                        $dbarr['create_datetime'] = date('Y-m-d H:i:s');
-
-                        $resinid = DB::table($this->tablename)->insertGetId($dbarr);
-                        if (!$resinid) {
-                            ++$count_err;
-                            return cmd(400, '【错误】数据添加失败，系统错误');
-                        } else {
-                            ++$count_suc;
-                            ZzAuth::log_cudn('c', __CLASS__, __FUNCTION__, $this->tablename, $resinid, ZzAuth::data_tojstr($dbarr, []));  //记录日志
-                        }
-                    }
-                }
-                return cmd(200, '数据恢复执行完成--总数：' . $count_sum . '，成功：' . $count_suc . '，失败：' . $count_err . '，跳过：' . $count_has);
-            }
-        }
-    }
-    
-    /**
-     * @authcheckname=>子框架菜单
-     * @authcheckshow=>1
-     */
-    public function leftmenu(Request $request)
-    {
-        if (true !== ZzAuth::check_auth(__CLASS__, __FUNCTION__, $resmsg)) {
-            return $resmsg;
-        }
-        $reqarr = $request->all();
-        $resarr = [];
-
-        $menulist = [];
-        $DB = DB::table($this->tablename)->select('id', 'flag', 'docname', 'typename', 'orderbyid');
-        $dbobj = $DB->orderBy('typename', 'asc')->orderBy('orderbyid', 'desc')->get();
-        if (!empty($dbobj)) {
-            foreach ($dbobj as $valm) {
-                $tmp_id = $valm->id ?? '';
-                $tmp_docname = $valm->docname ?? '';
-                $tmp_typename = $valm->typename ?? '';
-                if (!isset($menulist[$tmp_typename])) {
-                    $menulist[$tmp_typename] = [];
-                }
-                array_push($menulist[$tmp_typename], [$tmp_docname, $tmp_id, $tmp_typename]);
-            }
-        }
-
-        return view(($this->viewarray[__FUNCTION__] ?? 'system/error'), ['menulist' => $menulist]);
-    }
-
-    /**
-     * @authcheckname=>子框架主页面
-     * @authcheckshow=>1
-     */
-    public function rightbody(Request $request)
-    {
-        if (true !== ZzAuth::check_auth(__CLASS__, __FUNCTION__, $resmsg)) {
-            return $resmsg;
-        }
-        $reqarr = $request->all();
-        $resarr = [];
-
-        // return view(($this->viewarray[__FUNCTION__] ?? 'system/error'), ['reqarr' => $reqarr, 'resarr' => $resarr]);
-    }
-
-    /**
-     * @authcheckname=>输出查看
+     * @authcheckname=>页面查看
      * @authcheckshow=>1
      */
     public function docshow(Request $request)
@@ -394,7 +297,6 @@ class MarkdownController extends Controller
         }
     }
 
-
     /**
      * @authcheckname=>数据修改
      * @authcheckshow=>1
@@ -501,6 +403,101 @@ class MarkdownController extends Controller
                 //记录修改日志
                 ZzAuth::log_cudn('d', __CLASS__, __FUNCTION__, $this->tablename, ($reqarr['id'] ?? 0), ZzAuth::data_tojstr($olddbobj, []));
                 return cmd(200, '数据删除成功');
+            }
+        }
+    }
+
+    /**
+     * @authcheckname=>备份-执行
+     * @authcheckshow=>2
+     */
+    public function backup_exec(Request $request)
+    {
+        if (true !== ZzAuth::check_auth(__CLASS__, __FUNCTION__, $resmsg)) {
+            return $resmsg;
+        }
+        $reqarr = $request->all();
+        $resarr = [];
+        if ('yes' != ($reqarr['backup'] ?? '')) {
+            return cmd(400, '【错误】非法操作，备份校验参数不正确');
+        }
+
+        $count_sum = 0;
+        $count_suc = 0;
+        $count_err = 0;
+        $DB = DB::table($this->tablename);
+        $DB->orderBy('id')->chunk(50, function ($dbobj) use (&$count_sum, &$count_suc, &$count_err) {
+            foreach ($dbobj as $vald) {
+                ++$count_sum;
+                $backuppath = 'markdownback_' . date('Ymd') . '/' . ($vald->typename ?? '') . '_' . ($vald->docname ?? '') . '.md';
+                $backupdata = $vald->content ?? '';
+                $r = Storage::put($backuppath, $backupdata);
+                if ($r) {
+                    ++$count_suc;
+                } else {
+                    ++$count_err;
+                }
+            }
+        });
+        return cmd(200, '数据备份执行完成--总数：' . $count_sum . '，成功：' . $count_suc . '，失败：' . $count_err);
+    }
+
+    /**
+     * @authcheckname=>备份恢复-执行
+     * @authcheckshow=>2
+     */
+    public function recovery_exec(Request $request)
+    {
+        if (true !== ZzAuth::check_auth(__CLASS__, __FUNCTION__, $resmsg)) {
+            return $resmsg;
+        }
+        $reqarr = $request->all();
+        $resarr = [];
+        if ('' == ($reqarr['recoverydirname'] ?? '')) {
+            return cmd(400, '【错误】恢复对应文件夹名称不能为空');
+        }
+        if (true !== Storage::exists(($reqarr['recoverydirname'] ?? ''))) {
+            return cmd(400, '【错误】恢复对应文件夹名称不存在');
+        } else {
+            $filesarr = Storage::files(($reqarr['recoverydirname'] ?? ''));
+            if (!is_array($filesarr) || count($filesarr) <= 0) {
+                return cmd(400, '【错误】恢复对应文件夹下没有对应恢复文件');
+            } else {
+                $count_sum = 0;
+                $count_suc = 0;
+                $count_err = 0;
+                $count_has = 0;
+                foreach ($filesarr as $valf) {
+                    ++$count_sum;
+                    $tmp_filename = rtrim(basename($valf), '.md');
+                    $tmparr = explode('_', $tmp_filename, 2);
+                    $tmp_typename = $tmparr[0] ?? '';
+                    $tmp_docname = $tmparr[1] ?? '';
+                    $tmp_content = Storage::get($valf);
+
+                    $dbobj = DB::table($this->tablename)->where('docname', $tmp_docname)->first();
+                    if (!empty($dbobj)) {
+                        ++$count_has;
+                    } else {
+                        $dbarr = [];
+                        $dbarr['flag']            = '2';
+                        $dbarr['docname']         = $tmp_docname;
+                        $dbarr['typename']        = $tmp_typename;
+                        $dbarr['orderbyid']       = '100';
+                        $dbarr['content']         = $tmp_content;
+                        $dbarr['create_datetime'] = date('Y-m-d H:i:s');
+
+                        $resinid = DB::table($this->tablename)->insertGetId($dbarr);
+                        if (!$resinid) {
+                            ++$count_err;
+                            return cmd(400, '【错误】数据添加失败，系统错误');
+                        } else {
+                            ++$count_suc;
+                            ZzAuth::log_cudn('c', __CLASS__, __FUNCTION__, $this->tablename, $resinid, ZzAuth::data_tojstr($dbarr, []));  //记录日志
+                        }
+                    }
+                }
+                return cmd(200, '数据恢复执行完成--总数：' . $count_sum . '，成功：' . $count_suc . '，失败：' . $count_err . '，跳过：' . $count_has);
             }
         }
     }

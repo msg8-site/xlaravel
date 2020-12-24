@@ -92,7 +92,9 @@
 .icon-search-clear:hover{
     color: orange;
 }
-
+.mainmenuname {
+    font-weight: bold;
+}
 
 /*markdown文档格式css*/
 .markdown {

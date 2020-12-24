@@ -30,7 +30,6 @@
             $("html,body").animate({
                 scrollTop: jumptop
             }, 20);
-
         });
     });
 </script>
@@ -39,7 +38,6 @@
 <body class="mainbody">
     <div class="layui-container-tab">
         <div class="layui-row topfloatbar">
-            <button type="button" class="layui-btn layui-btn-primary layui-btn-sm topfloatbar-title" disabled>标题：文档查看</button>
             <button type="button" id="closeIframe" class="layui-btn layui-btn-danger layui-btn-sm">关闭当前页面</button>
             <button type="button" id="refreshPage" class="layui-btn layui-btn-normal layui-btn-sm">刷新页面</button>
             <button type="button" id="gotoTop" class="layui-btn layui-btn-sm">前往顶部</button>

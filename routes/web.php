@@ -11,9 +11,9 @@
 |
 */
 
-Route::get('/', function () {
-    return 'ok';
-});
+// Route::get('/', function () {
+//     return 'ok';
+// });
 
 //主框架页面
 Route::get('index', 'IndexController@index');
@@ -105,3 +105,10 @@ Route::post('markdown_add_exec', 'MarkdownController@add_exec');
 Route::get('markdown_update', 'MarkdownController@update');
 Route::post('markdown_update_exec', 'MarkdownController@update_exec');
 Route::post('markdown_delete', 'MarkdownController@delete');
+
+//开放文档
+Route::get('/', 'PublicdocController@childiframe');
+Route::get('publicdoc_leftmenu', 'PublicdocController@leftmenu');
+Route::post('publicdoc_search', 'PublicdocController@search');
+Route::get('publicdoc_rightbody', 'PublicdocController@rightbody');
+Route::get('publicdoc_docshow', 'PublicdocController@docshow');
