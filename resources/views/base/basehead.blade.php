@@ -8,7 +8,7 @@
     <meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no" />
     <meta http-equiv="Cache-Control" content="no-siteapp" />
     <meta name="csrf-token" content="{{ csrf_token() }}">
-    <title>{{ COMM_SYSNAME }}</title>
+    <title>{{ (''==($title??''))?COMM_SYSNAME:($title??'') }}</title>
     <link rel="stylesheet" href="https://lib.baomitu.com/layui/2.5.7/css/layui.min.css">
     <link rel="stylesheet" href="/css/main.css">
     <!--[if lt IE 9]>

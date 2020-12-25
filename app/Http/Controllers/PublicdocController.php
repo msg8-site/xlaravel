@@ -28,7 +28,7 @@ class PublicdocController extends Controller
         $reqarr = $request->all();
         $resarr = [];
 
-        return view(($this->viewarray[__FUNCTION__] ?? 'system/error'), ['reqarr' => $reqarr, 'resarr' => $resarr]);
+        return view(($this->viewarray[__FUNCTION__] ?? 'system/error'), ['title'=>'好网址文档','reqarr' => $reqarr, 'resarr' => $resarr]);
     }
 
     //开放文档子框架菜单
