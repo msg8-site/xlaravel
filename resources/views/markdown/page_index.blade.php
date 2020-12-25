@@ -263,7 +263,7 @@
                         <div class="layui-form-item">
                             <label class="layui-form-label">文档类型</label>
                             <div class="layui-input-inline">
-                                <select name="status" id="status">
+                                <select name="flag" id="flag">
                                     <option value="">请选择</option>
                                     <option value="1">开放</option>
                                     <option value="2">封闭</option>
