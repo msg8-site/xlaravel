@@ -7,15 +7,16 @@ xlaravel是一款基于 laravel6.20.x 和 layui2.5.x 的简单安全的单页面
 
 其他详细信息请阅读开发文档，文档地址如下
 
-https://doc.msg8.site/web/#/9
+<a href="https://sys.msg8.site/" target="_blank">sys.msg8.site/</a>
+
 
 <br>
 
 项目地址：
 
-https://github.com/msg8-site/xlaravel
+<a href="https://github.com/msg8-site/xlaravel" target="_blank">github.com/msg8-site/xlaravel</a>
 
-https://gitee.com/msg8-site/xlaravel
+<a href="https://gitee.com/msg8-site/xlaravel" target="_blank">gitee.com/msg8-site/xlaravel</a>
 
 <br>
 
@@ -25,18 +26,10 @@ https://xlaravel.msg8.site/index
 
 账号  root
 
-密码  msg8.site
+密码  msg8.site （请不要随意删除数据，修改root账号密码，其他操作请随意测试）
 
 <br>
 
-#### 项目初衷
-本项目编写的初中是为了获得更安全更简单的后台系统框架，虽然现在有很多的开源后台框架，但是用起来感觉封装太严重，结构也不够简洁
-
-还要花费很长的时间研究文档，甚至是改框架代码才能完成某个需求
-
-所以我基于简单安全的理念，设计了这个最基础的后台管理框架xlaravel
-
-<br>
 
 #### 使用说明
 
