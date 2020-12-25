@@ -66,6 +66,11 @@
             return false;
         });
 
+        form.on('select(fastselect)', function(data) {
+            $("#typename").val(data.value);
+            form.render(); //表单渲染
+        });
+
     });
 
     //刷新文档预览
@@ -135,6 +140,15 @@
                 <label class="layui-form-label">分类名称</label>
                 <div class="layui-input-block">
                     <input type="text" name="typename" id="typename" lay-verify="" autocomplete="off" maxlength="64" placeholder="分类名称" class="layui-input" value="">
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label">分类快选</label>
+                <div class="layui-input-block">
+                    <select lay-filter="fastselect">
+                        <option value="">辅助项，选择此项会快速填充内容到分类名称</option>
+                        {!! $resarr['option_typename'] ?? '' !!}
+                    </select>
                 </div>
             </div>
             <div class="layui-form-item">

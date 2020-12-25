@@ -183,14 +183,13 @@ class MarkdownController extends Controller
         $reqarr = $request->all();
         $resarr = [];
 
-        if(''==($reqarr['contentval']??'')) {
-            return cmd(200, '数据为空','');
-        }else {
+        if ('' == ($reqarr['contentval'] ?? '')) {
+            return cmd(200, '数据为空', '');
+        } else {
             $Parsedown = new Parsedown();
-            $resdata = $Parsedown->text(($reqarr['contentval']??''));
+            $resdata = $Parsedown->text(($reqarr['contentval'] ?? ''));
 
-            return cmd(200, '数据生成成功',$resdata);
-
+            return cmd(200, '数据生成成功', $resdata);
         }
     }
 
@@ -271,6 +270,15 @@ class MarkdownController extends Controller
         $reqarr = $request->all();
         $resarr = [];
 
+        $dbobj = DB::table($this->tablename)->select('typename')->groupBy('typename')->orderBy('typename')->get();
+        if (!empty($dbobj)) {
+            $tmparr = [];
+            foreach ($dbobj as $vald) {
+                $tmparr[($vald->typename ?? '')] = ($vald->typename ?? '');
+            }
+            $resarr['option_typename'] = comm_ccoption('', $tmparr, false);
+        }
+
         $resarr['option_flag'] = comm_ccoption('2', 'openclose', false);
 
         return view(($this->viewarray[__FUNCTION__] ?? 'system/error'), ['reqarr' => $reqarr, 'resarr' => $resarr]);
@@ -298,7 +306,7 @@ class MarkdownController extends Controller
             return cmd(400, '【错误】' . $validator->errors()->all()[0]);
         }
         $dbobj = DB::table($this->tablename)->where('docname', ($reqarr['docname'] ?? ''))->first();
-        if (!empty($olddbobj)) {
+        if (!empty($dbobj)) {
             return cmd(400, '【错误】文档名称已经存在，不可重复添加');
         } else {
             $dbarr = [];
@@ -342,6 +350,15 @@ class MarkdownController extends Controller
             } else {
                 $resarr['data'] = get_object_vars($dbobj);
                 $resarr['data']['option_flag'] = comm_ccoption($resarr['data']['flag'], 'openclose', false);
+            }
+            
+            $dbobj = DB::table($this->tablename)->select('typename')->groupBy('typename')->orderBy('typename')->get();
+            if (!empty($dbobj)) {
+                $tmparr = [];
+                foreach ($dbobj as $vald) {
+                    $tmparr[($vald->typename ?? '')] = ($vald->typename ?? '');
+                }
+                $resarr['option_typename'] = comm_ccoption('', $tmparr, false);
             }
         }
 
