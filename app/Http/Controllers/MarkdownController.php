@@ -171,6 +171,28 @@ class MarkdownController extends Controller
 
         return view(($this->viewarray[__FUNCTION__] ?? 'system/error'), ['reqarr' => $reqarr, 'resarr' => $resarr]);
     }
+    /**
+     * @authcheckname=>实时预览
+     * @authcheckshow=>2
+     */
+    public function realtimeshow(Request $request)
+    {
+        if (true !== ZzAuth::check_auth(__CLASS__, __FUNCTION__, $resmsg)) {
+            return $resmsg;
+        }
+        $reqarr = $request->all();
+        $resarr = [];
+
+        if(''==($reqarr['contentval']??'')) {
+            return cmd(200, '数据为空','');
+        }else {
+            $Parsedown = new Parsedown();
+            $resdata = $Parsedown->text(($reqarr['contentval']??''));
+
+            return cmd(200, '数据生成成功',$resdata);
+
+        }
+    }
 
     /**
      * @authcheckname=>数据查看

@@ -4,12 +4,15 @@
         //注意：parent 是 JS 自带的全局对象，可用于操作父页面
         var iframeindex = parent.layer.getFrameIndex(window.name); //获取窗口索引
         form.render(); //表单渲染
-        
-        if('undefined'==(typeof iframeindex)) {
+
+        if ('undefined' == (typeof iframeindex)) {
             $('#closeIframe').hide();
         }
         $('#closeIframe').click(function() {
             parent.layer.close(iframeindex);
+        });
+        $("#realtimeshowBtn").click(function() {
+            refreshmarkdown();
         });
 
         //监听提交
@@ -64,6 +67,40 @@
         });
 
     });
+
+    //刷新文档预览
+    function refreshmarkdown() {
+        var contentval = $("#content").val();
+        $.ajax({
+            type: "POST",
+            async: true,
+            url: "{{$reqarr['configurl_realtimeshow']??''}}",
+            data: 'contentval=' + encodeURIComponent(contentval),
+            success: function(res) {
+                let resc = (typeof res.c == "undefined") ? -1 : res.c;
+                let resm = (typeof res.m == "undefined") ? '' : res.m;
+                let resd = (typeof res.d == "undefined") ? {} : res.d;
+                if (200 == resc) {
+                    $("#realtimepreview").html(resd);
+                } else {
+                    parent.xlayer.alert(resm.replace(/\n/g, "<br>"));
+                }
+            },
+            error: function(res) {
+                try {
+                    let resmessage = res.responseJSON.message;
+                    if ('' != resmessage) {
+                        parent.xlayer.alert('<span style="color:red;">【错误】数据请求出错，请稍后重试<br>' + resmessage + '</span>');
+                    }
+                } catch (error) {
+                    parent.xlayer.alert('<span style="color:red;">【错误】数据请求出错，请稍后重试</span>');
+                }
+            },
+            complete: function() {
+                //parent.xlayer.close(iload); //关闭等待加载层
+            }
+        });
+    }
 </script>
 </head>
 
@@ -75,6 +112,7 @@
             <button type="button" id="refreshPage" class="layui-btn layui-btn-normal layui-btn-sm">刷新页面</button>
             <button type="button" id="gotoTop" class="layui-btn layui-btn-sm">前往顶部</button>
             <button type="button" id="gotoBottom" class="layui-btn layui-btn-sm">前往底部</button>
+            <button type="button" id="realtimeshowBtn" class="layui-btn layui-btn-sm">预览刷新</button>
             <hr class="layui-bg-gray">
         </div>
 
@@ -117,16 +155,21 @@
             </div>
             <div class="layui-form-item layui-form-text">
                 <label class="layui-form-label">markdown文档内容</label>
-                <div class="layui-input-block">
-                    <textarea name="content" id="content" class="layui-textarea" placeholder="请输入markdown格式文档内容" style="height: 750px;">{{ $resarr['data']['content'] ?? '' }}</textarea>
+                <div class="layui-input-block"">
+                    <div style=" display: inline-block;width:calc(50% - 6px);">
+                    <textarea name="content" id="content" class="layui-textarea" placeholder="请输入markdown格式文档内容" style="height: 700px;">{{ $resarr['data']['content'] ?? '' }}</textarea>
+                </div>
+                <div id="realtimepreview" class="markdown" style="display:inline-block;width:calc(50% - 6px);height:700px;overflow-y:auto;margin-left:1px;margin-top:3px;border:solid 1px #CCCCCC;">
+                    <h1 style="margin:20px">点击顶部【预览刷新】按钮刷新预览页面</h1>
                 </div>
             </div>
+    </div>
 
-            <div class="layui-form-item">
-                <button type="submit" class="layui-btn layui-btn-normal" lay-submit="" lay-filter="formtable">立即提交</button>
-            </div>
-        </form>
-        @endif
+    <div class="layui-form-item">
+        <button type="submit" class="layui-btn layui-btn-normal" lay-submit="" lay-filter="formtable">立即提交</button>
+    </div>
+    </form>
+    @endif
 
     </div>
 

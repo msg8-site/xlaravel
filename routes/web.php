@@ -97,6 +97,7 @@ Route::get('markdown_rightbody', 'MarkdownController@rightbody');
 Route::post('markdown_backup_exec', 'MarkdownController@backup_exec');
 Route::post('markdown_recovery_exec', 'MarkdownController@recovery_exec');
 
+Route::post('markdown_realtimeshow', 'MarkdownController@realtimeshow');
 Route::get('markdown_docshow', 'MarkdownController@docshow');
 Route::get('markdown_index', 'MarkdownController@index');
 Route::get('markdown_index_tabledata', 'MarkdownController@index_tabledata');

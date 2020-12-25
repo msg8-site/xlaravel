@@ -10,6 +10,7 @@
         var configurl_docshow = '/markdown_docshow';
         var configurl_backup = '/markdown_backup_exec';
         var configurl_recovery = '/markdown_recovery_exec';
+        var configurl_realtimeshow = '/markdown_realtimeshow';
 
         form.render(); //表单渲染
         //表格渲染
@@ -77,7 +78,7 @@
                     title: '<span style="font-weight:bold;">【弹出层】数据操作窗口界面</span>',
                     shadeClose: false,
                     area: ['100%', '100%'],
-                    content: configurl_add + "?configurl_add_exec=" + encodeURIComponent(configurl_add_exec)
+                    content: configurl_add + "?configurl_add_exec=" + encodeURIComponent(configurl_add_exec) + "&configurl_realtimeshow=" + encodeURIComponent(configurl_realtimeshow)
                 });
             } else if ('tabletoolbar_backup' == obj.event) {
                 xlayer.confirm('确认执行备份操作吗？执行备份时请耐心等待备份完成', {
@@ -130,7 +131,7 @@
                         type: "POST",
                         async: true,
                         url: configurl_recovery,
-                        data: 'recoverydirname='+encodeURIComponent(value),
+                        data: 'recoverydirname=' + encodeURIComponent(value),
                         success: function(res) {
                             let resc = (typeof res.c == "undefined") ? -1 : res.c;
                             let resm = (typeof res.m == "undefined") ? '' : res.m;
@@ -182,7 +183,7 @@
                     title: '<span style="font-weight:bold;">【弹出层】数据操作窗口界面</span>',
                     shadeClose: false,
                     area: ['100%', '100%'],
-                    content: configurl_update + '?id=' + obj.data.id + "&configurl_update_exec=" + encodeURIComponent(configurl_update_exec)
+                    content: configurl_update + '?id=' + obj.data.id + "&configurl_update_exec=" + encodeURIComponent(configurl_update_exec) + "&configurl_realtimeshow=" + encodeURIComponent(configurl_realtimeshow)
                 });
             } else if ('tablelinetoolbar_delete' == obj.event) {
                 xlayer.confirm('确认执行删除操作吗', {
