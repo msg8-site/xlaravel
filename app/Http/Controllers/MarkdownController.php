@@ -62,7 +62,7 @@ class MarkdownController extends Controller
 
         $menulist = [];
         $DB = DB::table($this->tablename)->select('id', 'flag', 'docname', 'typename', 'orderbyid');
-        $dbobj = $DB->orderBy('typename', 'asc')->orderBy('orderbyid', 'desc')->get();
+        $dbobj = $DB->orderBy('flag')->orderBy('typename', 'asc')->orderBy('orderbyid', 'desc')->get();
         if (!empty($dbobj)) {
             foreach ($dbobj as $valm) {
                 $tmp_id = $valm->id ?? '';
@@ -115,7 +115,7 @@ class MarkdownController extends Controller
         if ('' != ($reqarr['searchval'] ?? '')) {
             $DB->orWhere('content', 'like', '%' . ($reqarr['searchval'] ?? '') . '%');
         }
-        $dbobj = $DB->orderBy('typename', 'asc')->orderBy('orderbyid', 'desc')->get();
+        $dbobj = $DB->orderBy('flag')->orderBy('typename', 'asc')->orderBy('orderbyid', 'desc')->get();
         if (!empty($dbobj)) {
             foreach ($dbobj as $valm) {
                 $tmp_id = $valm->id ?? '';
@@ -246,7 +246,7 @@ class MarkdownController extends Controller
         }
 
         $dbcount = $DB->count();
-        $dbobj   = $DB->orderBy('typename')->orderBy('orderbyid', 'desc')->paginate($reqarr['limit'] ?? 20)->items();
+        $dbobj   = $DB->orderBy('flag')->orderBy('typename')->orderBy('orderbyid', 'desc')->paginate($reqarr['limit'] ?? 20)->items();
         if (empty($dbobj)) {
             return ['code' => 9, 'msg' => '【错误】数据不存在', 'data' => []];
         } else {
