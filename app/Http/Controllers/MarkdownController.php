@@ -351,7 +351,7 @@ class MarkdownController extends Controller
                 $resarr['data'] = get_object_vars($dbobj);
                 $resarr['data']['option_flag'] = comm_ccoption($resarr['data']['flag'], 'openclose', false);
             }
-            
+
             $dbobj = DB::table($this->tablename)->select('typename')->groupBy('typename')->orderBy('typename')->get();
             if (!empty($dbobj)) {
                 $tmparr = [];
@@ -468,7 +468,7 @@ class MarkdownController extends Controller
         $DB->orderBy('id')->chunk(50, function ($dbobj) use (&$count_sum, &$count_suc, &$count_err) {
             foreach ($dbobj as $vald) {
                 ++$count_sum;
-                $backuppath = 'markdownback_' . date('Ymd') . '/' . ($vald->typename ?? '') . '_' . ($vald->docname ?? '') . '.md';
+                $backuppath = 'markdownback_' . date('Ymd_His') . '/' . ($vald->typename ?? '') . '_' . ($vald->docname ?? '') . '.md';
                 $backupdata = $vald->content ?? '';
                 $r = Storage::put($backuppath, $backupdata);
                 if ($r) {
