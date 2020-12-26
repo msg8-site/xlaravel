@@ -77,7 +77,7 @@ class ZzAuth
     public static function check_auth($classname = '', $functionname = '', &$errmsg = ''): bool
     {
         $log = new Logger('zzcheck');
-        $log->pushHandler(new StreamHandler('/data/log/' . COMM_SYSFLAG . '/' . date('Y_m_d') . '_' . COMM_SYSFLAG, Logger::INFO));
+        $log->pushHandler(new StreamHandler('/data/log/' . COMM_SYSFLAG . '/' . date('Y_m_d') . '_' . COMM_SYSFLAG.'_check_auth', Logger::INFO));
 
         $resval = false;
         $user_role = '0';
