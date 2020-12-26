@@ -43,8 +43,8 @@
 </head>
 
 <body>
-    <iframe name="iframeleft" id="iframeleft" src="/markdown_leftmenu"></iframe>
-    <iframe name="iframeright" id="iframeright" src="/markdown_rightbody"></iframe>
+    <iframe name="iframeleft" id="iframeleft" src="markdown_leftmenu"></iframe>
+    <iframe name="iframeright" id="iframeright" src="markdown_rightbody"></iframe>
 
 
     @include('base/basefoot')

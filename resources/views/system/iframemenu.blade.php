@@ -7,8 +7,9 @@
         });
 
         $(".childmenuname").click(function() {
+            console.log(1111)
             var nowthis = $(this);
-            if ('退出登录' == nowthis.html() && '/logout' == nowthis.attr('href')) {
+            if ('退出登录' == nowthis.html() && 'logout' == nowthis.attr('href')) {
                 //退出操作单独判断
                 xlayer.confirm('确认要退出系统吗', {
                     btn: ['确认', '取消']
@@ -19,7 +20,7 @@
                     $.ajax({
                         type: "POST",
                         async: true,
-                        url: "/logout",
+                        url: "logout",
                         data: 'logout=yes',
                         success: function(res) {
                             let resc = (typeof res.c == "undefined") ? -1 : res.c;
@@ -28,7 +29,7 @@
                             if (200 == resc) {
                                 xlayer.alert(resm, {
                                     end: function() {
-                                        top.location.href = "/index"
+                                        top.location.href = "index"
                                     }
                                 });
                             } else {

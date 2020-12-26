@@ -21,18 +21,14 @@
             $.ajax({
                 type: "POST",
                 async: true,
-                url: "/login_exec",
+                url: "login_exec",
                 data: formajaxdata,
                 success: function(res) {
                     let resc = (typeof res.c == "undefined") ? -1 : res.c;
                     let resm = (typeof res.m == "undefined") ? '' : res.m;
                     let resd = (typeof res.d == "undefined") ? {} : res.d;
                     if (200 == resc) {
-                        xlayer.alert(resm, {
-                            end: function() {
-                                window.location.href = "/index"
-                            }
-                        });
+                        window.location.href = "index"
                     } else {
                         xlayer.alert(resm.replace(/\n/g, "<br>"));
                     }

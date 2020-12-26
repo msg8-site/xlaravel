@@ -155,11 +155,16 @@ class MarkdownController extends Controller
         $reqarr = $request->all();
         $resarr = [];
         $resarr['errmsg'] = '';  //不为空时页面直接仅显示本信息
-        if (!is_numeric($reqarr['id'] ?? '')) {
+        if (!is_numeric($reqarr['id'] ?? '') && ''==($reqarr['docname'] ?? '')) {
             $resarr['errmsg'] = '【错误】非法操作，未匹配到对应数据';
         } else {
             $DB = DB::table($this->tablename);
-            $dbobj = $DB->where('id', ($reqarr['id'] ?? '0'))->first();
+            if(''!=($reqarr['docname'] ?? '')) {
+                $DB->where('docname', ($reqarr['docname'] ?? ''));
+            }else {
+                $DB->where('id', ($reqarr['id'] ?? '0'));
+            }
+            $dbobj = $DB->first();
             if (empty($dbobj)) {
                 $resarr['errmsg'] = '【错误】未找到对应数据';
             } else {

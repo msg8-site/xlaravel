@@ -36,7 +36,7 @@
         $.ajax({
             type: "POST",
             async: true,
-            url: "/markdown_search",
+            url: "markdown_search",
             data: 'searchval=' + encodeURIComponent(searchval),
             success: function(res) {
                 let resc = (typeof res.c == "undefined") ? -1 : res.c;

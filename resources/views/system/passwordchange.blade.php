@@ -38,7 +38,7 @@
                 $.ajax({
                     type: "POST",
                     async: true,
-                    url: "/passwordchange_exec",
+                    url: "passwordchange_exec",
                     data: formajaxdata,
                     success: function(res) {
                         let resc = (typeof res.c == "undefined") ? -1 : res.c;
@@ -48,7 +48,7 @@
                             xlayer.alert(resm, {
                                 end: function() {
                                     window.location.reload()
-                                    // window.location.href="/index";
+                                    // window.location.href="index";
                                 }
                             });
                         } else {

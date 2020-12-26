@@ -8,7 +8,7 @@
         $.ajax({
             type: "get",
             async: true,
-            url: "/ajax_heartbeat?randtime=" + Math.random(),
+            url: "ajax_heartbeat?randtime=" + Math.random(),
             success: function(data) {}
         });
     }

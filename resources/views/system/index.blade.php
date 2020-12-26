@@ -54,9 +54,9 @@
 </head>
 
 <body>
-    <iframe name="iframeheader" id="iframeheader" src="/iframeheader"></iframe>
-    <iframe name="iframemenu" id="iframemenu" src="/iframemenu"></iframe>
-    <iframe name="iframebody" id="iframebody" src="/iframebody"></iframe>
+    <iframe name="iframeheader" id="iframeheader" src="iframeheader"></iframe>
+    <iframe name="iframemenu" id="iframemenu" src="iframemenu"></iframe>
+    <iframe name="iframebody" id="iframebody" src="iframebody"></iframe>
 
 
     @include('base/basefoot')
