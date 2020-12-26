@@ -74,7 +74,7 @@
         <div class="layui-side layui-bg-black">
             <div class="layui-side-scroll">
                 <!-- 左侧导航区域（可配合layui已有的垂直导航） -->
-                <ul class="layui-nav layui-nav-tree layui-nav-side" lay-filter="test" style="background-color: #777777;">
+                <ul class="layui-nav layui-nav-tree layui-nav-side" lay-filter="test" style="background-color: #777777;padding-bottom:100px;">
                     <div style="position: sticky;top:0px;z-index: 999;">
                         <i class="layui-icon layui-icon-close-fill icon-search-clear"></i>
                         <input class="layui-input" type="text" name="fastsearch" id="fastsearch" autocomplete="off" placeholder="检索内容，回车提交">

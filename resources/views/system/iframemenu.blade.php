@@ -65,7 +65,7 @@
         <div class="layui-side layui-bg-black">
             <div class="layui-side-scroll">
                 <!-- 左侧导航区域（可配合layui已有的垂直导航） -->
-                <ul class="layui-nav layui-nav-tree layui-nav-side" lay-filter="test">
+                <ul class="layui-nav layui-nav-tree layui-nav-side" lay-filter="test" style="padding-bottom:100px;">
                     @foreach ($menulist as $keym => $valm)
                         @if (isset($menulist[$keym]['m']))
                             <li class="layui-nav-item">
