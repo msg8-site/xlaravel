@@ -54,6 +54,7 @@
         @else
         <div class="markdown-right-tab">
             <h3 style="font-weight: bold;margin-bottom:5px;">快速定位标题板</h3>
+            <h4 style="font-weight: bold;margin-bottom:5px;">{{($resarr['data']['docname']??'')}}</h4>
         </div>
 
         <div class="markdown">
