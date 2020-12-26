@@ -48,5 +48,14 @@
                     scrollTop: $(document).height()
                 }, 20);
             });
+            //复制到剪切板操作
+            var clipboard = new ClipboardJS('.btncopy');
+            clipboard.on('success', function(e) {
+                xlayer.msg('复制成功<br>' + e.text);
+                e.clearSelection();
+            });
+            clipboard.on('error', function(e) {
+                xlayer.msg('<span style="color:red;">复制失败，请手动复制</span>');
+            });
         }
     </script>

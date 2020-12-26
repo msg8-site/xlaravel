@@ -42,6 +42,7 @@
             <button type="button" class="layui-btn layui-btn-primary layui-btn-sm topfloatbar-title" disabled>标题：文档查看</button>
             <button type="button" id="closeIframe" class="layui-btn layui-btn-danger layui-btn-sm">关闭当前页面</button>
             <button type="button" id="refreshPage" class="layui-btn layui-btn-normal layui-btn-sm">刷新页面</button>
+            <button type="button" class="layui-btn layui-btn-normal layui-btn-sm btncopy" data-clipboard-text="{{($resarr['data']['id']??'0')}}">复制ID:{{($resarr['data']['id']??'0')}}</button>
             <button type="button" id="gotoTop" class="layui-btn layui-btn-sm">前往顶部</button>
             <button type="button" id="gotoBottom" class="layui-btn layui-btn-sm">前往底部</button>
             <button type="button" id="showhiderighttab" class="layui-btn layui-btn-sm">隐藏/显示标题板</button>
