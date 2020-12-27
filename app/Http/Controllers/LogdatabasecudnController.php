@@ -129,6 +129,7 @@ class LogdatabasecudnController extends Controller
             
             foreach ($dbobj as $valb) {
                 $valb->type_show = comm_colorspantype($valb->type??'');
+                $valb->cudndata = htmlentities($valb->cudndata);
             }
 
             return ['code' => 0, 'msg' => '查询成功', 'count' => $dbcount, 'data' => $dbobj];
