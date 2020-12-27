@@ -1,14 +1,14 @@
 @include('base/basehead')
 <script type="text/javascript">
     $("document").ready(function() {
-        setInterval(func_upheartbeat, 600000);  //每600秒触发
+        setInterval(func_upheartbeat, 600000);  //每600秒(10分钟)定时触发
     });
 
     function func_upheartbeat() {
         $.ajax({
             type: "get",
             async: true,
-            url: "ajax_heartbeat?randtime=" + Math.random(),
+            url: "ajax_heartbeat?randtime=" + Math.random()+"&uname={{session(SESS_USERNAME,'')}}&mckey={{session(SESS_MORECKEY,'')}}",
             success: function(data) {}
         });
     }
