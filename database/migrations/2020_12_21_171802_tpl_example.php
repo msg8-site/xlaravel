@@ -40,7 +40,7 @@ class TplExample extends Migration
                 ['status' => '1', 'name' => 'xlaravel演示后台', 'testdata1' => 'https://xlaravel.msg8.site/index', 'create_datetime' => date('Y-m-d H:i:s'), 'backup1' => '初始化数据'],
                 ['status' => '1', 'name' => '辅助代码库', 'testdata1' => 'https://code.msg8.site/', 'create_datetime' => date('Y-m-d H:i:s'), 'backup1' => '初始化数据'],
                 ['status' => '1', 'name' => '好网址导航', 'testdata1' => 'https://www.msg8.site/', 'create_datetime' => date('Y-m-d H:i:s'), 'backup1' => '初始化数据'],
-                ['status' => '1', 'name' => 'xlaravel文档', 'testdata1' => 'https://doc.msg8.site/web/#/9', 'create_datetime' => date('Y-m-d H:i:s'), 'backup1' => '初始化数据'],
+                ['status' => '1', 'name' => 'xlaravel文档', 'testdata1' => 'https://sys.msg8.site/', 'create_datetime' => date('Y-m-d H:i:s'), 'backup1' => '初始化数据'],
             ]);
         }
     }
