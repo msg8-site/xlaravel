@@ -61,6 +61,7 @@
     border: solid 1px #CCCCCC;
     background-color: #f8f8f8;
     overflow: hidden;
+    overflow-y: auto;
     text-overflow: ellipsis;
     white-space: nowrap;
     float: right;
@@ -70,6 +71,7 @@
     position: fixed;
     width: 320px;
     padding: 10px 6px;
+    max-height: calc(100% - 150px);
 }
 .markdown-right-tab .biaoti {
     padding:2px 0px;
