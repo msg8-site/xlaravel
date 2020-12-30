@@ -167,9 +167,6 @@
     border-radius: 3px;
     padding: 5px;
 }
-.markdown tr:nth-child(even) {
-    background-color: #f8f8f8;
-}
 .markdown a,
 .markdown a:visited {
     color: #4183c4;
