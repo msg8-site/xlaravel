@@ -452,7 +452,6 @@ class FundController extends Controller
                     }
                     //更新到子表-结束-----------------------------
                     $childdbobj = DB::table('x_fundchild')->where('fid', $tmp_id)->orderByDesc('thedate')->get();
-                    $cdb_jignzhi_day_arr = [];
 
                     $cdb_sumhas_count = 0;
                     $cdb_sumhas_money = 0;
@@ -613,11 +612,10 @@ class FundController extends Controller
             if (!empty($dbobj)) {
                 foreach ($dbobj as $vald) {
                     $tmp_fundcode = $vald->fundcode ?? '';
-                    $tmp_fundname = $vald->fundname ?? '';
                     if (6 == strlen($tmp_fundcode)) {
                         //判断更新是否频繁
-                        $getupdatetime = DB::table('x_fundtemp')->where('fundcode', $tmp_fundcode)->where('update_datetime', '<=', date('Y-m-d H:i:s', (time() - $cuttimes)))->first();
-                        if (!empty($getupdatetime) || '' == $tmp_fundname) {
+                        $datahas = DB::table('x_fundtemp')->where('fundcode', $tmp_fundcode)->first();
+                        if (empty($datahas) || strtotime($datahas->update_datetime??'2000-01-01')<(time()-$cuttimes)) {
                             $fund_mainurl = 'https://fundgz.1234567.com.cn/js/' . $tmp_fundcode . '.js?rt=' . time() . mt_rand(100, 999);
                             $res_main = zzget($fund_mainurl);
                             $resarr_main = json_decode((!empty($res_main) ? substr($res_main, 8, -2) : ''), true);
