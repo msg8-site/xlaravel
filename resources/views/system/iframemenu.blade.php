@@ -7,7 +7,6 @@
         });
 
         $(".childmenuname").click(function() {
-            console.log(1111)
             var nowthis = $(this);
             if ('退出登录' == nowthis.html() && 'logout' == nowthis.attr('href')) {
                 //退出操作单独判断

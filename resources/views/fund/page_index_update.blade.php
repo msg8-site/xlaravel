@@ -9,7 +9,6 @@
             $('#closeIframe').hide();
         }
         $('#closeIframe').click(function() {
-            console.log(iframeindex)
             parent.layer.close(iframeindex);
         });
 
