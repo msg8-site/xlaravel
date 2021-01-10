@@ -57,12 +57,12 @@ function comm_ccoption($chkval = '', $arrc = [], $hassel = true)
                 '1' => '1-单终端',
                 '2' => '2-多终端',
             ];
-        }else if ('openclose' == $arrc) {
+        } else if ('openclose' == $arrc) {
             $myarr = [
                 '1' => '1-开放',
                 '2' => '2-封闭',
             ];
-        } 
+        }
     }
     foreach ($myarr as $keym => $valm) {
         $optionmy .= '<option value="' . $keym . '" ';
@@ -195,4 +195,53 @@ function comm_getip()
     } else {
         return '0.0.0.0';
     }
+}
+
+function zzget($url = '', $timeout = 5000, $header = array(), $useragent = 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/87.0.4280.88 Safari/537.36 (https://www.msg8.site)', $restype = 'one')
+{
+    if (!function_exists('curl_init')) {
+        return false;
+    }
+    if (substr($url, 0, 7) != 'http://' && substr($url, 0, 8) != 'https://') {
+        return 'url_error';
+    }
+    //对传递的header数组进行整理
+    $headerArr = array();
+    foreach ($header as $n => $v) {
+        $headerArr[] = $n . ':' . $v;
+    }
+    $curl = curl_init();
+    curl_setopt($curl, CURLOPT_URL, $url);
+    curl_setopt($curl, CURLOPT_HEADER, 0);
+    curl_setopt($curl, CURLOPT_NOBODY, 0);
+    curl_setopt($curl, CURLOPT_SSL_VERIFYPEER, 0);
+    curl_setopt($curl, CURLOPT_SSL_VERIFYHOST, 2);
+    if (trim($useragent) != '') {
+        curl_setopt($curl, CURLOPT_USERAGENT, $useragent);
+    }
+    curl_setopt($curl, CURLOPT_FOLLOWLOCATION, 1);
+    curl_setopt($curl, CURLOPT_AUTOREFERER, 1);
+    curl_setopt($curl, CURLOPT_NOSIGNAL, 1);
+    curl_setopt($curl, CURLOPT_CONNECTTIMEOUT_MS, $timeout);
+    curl_setopt($curl, CURLOPT_TIMEOUT_MS, $timeout);
+    curl_setopt($curl, CURLOPT_RETURNTRANSFER, TRUE); 
+    curl_setopt($curl, CURLOPT_HTTP_VERSION, CURL_HTTP_VERSION_1_0);
+    if (count($headerArr) > 0) {
+        curl_setopt($curl, CURLOPT_HTTPHEADER, $headerArr);
+    }
+    $content  = curl_exec($curl);
+    $httpcode = curl_getinfo($curl, CURLINFO_HTTP_CODE);
+    $run_time = (curl_getinfo($curl, CURLINFO_TOTAL_TIME) * 1000);
+    $errorno  = curl_errno($curl);
+    curl_close($curl);
+    if ('one' == $restype) {
+        return $content;
+    }
+    //定义return数组变量
+    $retarr = array();
+    $retarr['content']  = $content;
+    $retarr['httpcode'] = $httpcode;
+    $retarr['run_time'] = $run_time;
+    $retarr['errorno']  = $errorno;
+    return $retarr;
 }

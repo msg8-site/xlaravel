@@ -58,7 +58,6 @@ class ExampleController extends Controller
         $validator = Validator::make($reqarr, [
             'name'   => 'bail|nullable|max:64',
             'status' => 'bail|nullable|integer',
-            'status' => 'bail|nullable|integer',
             'page'   => 'bail|nullable|integer',
             'limits' => 'bail|nullable|integer',
         ]);

@@ -41,6 +41,7 @@ class SysMenu extends Migration
                 ['id' => '9', 'fid' => '1', 'menuname' => '开发参考样例', 'menupath' => 'example_index', 'orderbyid' => '600', 'create_datetime' => date('Y-m-d H:i:s'), 'backup1' => '初始化数据'],
                 ['id' => '10', 'fid' => '1', 'menuname' => '文档管理', 'menupath' => 'markdown_index', 'orderbyid' => '600', 'create_datetime' => date('Y-m-d H:i:s'), 'backup1' => '初始化数据'],
                 ['id' => '11', 'fid' => '1', 'menuname' => '文档查看', 'menupath' => 'markdown_childiframe', 'orderbyid' => '600', 'create_datetime' => date('Y-m-d H:i:s'), 'backup1' => '初始化数据'],
+                ['id' => '12', 'fid' => '1', 'menuname' => '基金辅助工具', 'menupath' => 'fund_index', 'orderbyid' => '600', 'create_datetime' => date('Y-m-d H:i:s'), 'backup1' => '初始化数据'],
             ]);
         }
     }

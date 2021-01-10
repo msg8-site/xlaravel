@@ -113,3 +113,18 @@ Route::get('publicdoc_leftmenu', 'PublicdocController@leftmenu');
 Route::post('publicdoc_search', 'PublicdocController@search');
 Route::get('publicdoc_rightbody', 'PublicdocController@rightbody');
 Route::get('publicdoc_docshow', 'PublicdocController@docshow');
+
+//基金辅助工具
+Route::get('fund_index', 'FundController@index');
+Route::get('fund_index_tabledata', 'FundController@index_tabledata');
+Route::get('fund_add', 'FundController@add');
+Route::post('fund_add_exec', 'FundController@add_exec');
+Route::post('fund_delete', 'FundController@delete');
+Route::get('fund_index_update', 'FundController@index_update');
+Route::get('fund_index_update_tabledata', 'FundController@index_update_tabledata');
+Route::get('fundchild_update', 'FundController@childupdate');
+Route::post('fundchild_update_exec', 'FundController@childupdate_exec');
+Route::get('mainchildupdate', 'FundController@mainchildupdate');
+Route::get('fundtempupdate', 'FundController@fundtempupdate');
+
+
