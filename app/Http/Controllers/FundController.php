@@ -597,11 +597,11 @@ class FundController extends Controller
     //基金缓存数据更新
     public function fundtempupdate(Request $request)
     {
-        $cuttimes = 300;
+        $cuttimes = 60;
         $nowhour = date('G');
         $nowweek = date('w');
         if($nowhour>=9 && $nowhour<=14 && $nowweek>0 && $nowweek<6) {
-            $cuttimes = 30;
+            $cuttimes = 20;
         }
         $reqarr = $request->all();
         if ('kkkkkk2021QWhERhTYrss' != ($reqarr['key'] ?? '')) {
