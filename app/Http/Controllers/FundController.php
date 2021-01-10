@@ -65,8 +65,6 @@ class FundController extends Controller
         if ($validator->fails()) {
             return ['code' => 9, 'msg' =>  '【错误】' . $validator->errors()->all()[0], 'data' => []];
         }
-        //更新主表数据
-        $this->mainchildupdate();
 
         $DB = DB::table($this->tablename);
         if ('' != ($reqarr['fundcode'] ?? '')) {
@@ -410,12 +408,18 @@ class FundController extends Controller
         }
     }
 
-    //主表子表更新
+    /**
+     * @authcheckname=>主表子表更新
+     * @authcheckshow=>2
+     */
     public function mainchildupdate()
     {
+        if (true !== ZzAuth::check_auth(__CLASS__, __FUNCTION__, $resmsg)) {
+            return cmd(400, $resmsg);
+        }
+
         //缓存异步触发
-        $cache_fundtempupdate = url("fundtempupdate") . '?key=kkkkkk2021QWhERhTYrss';
-        zzget($cache_fundtempupdate, 200);
+        $this->fundtempupdate();
 
         $dbobj = DB::table($this->tablename)->where('update_datetime', '<=', date('Y-m-d H:i:s', (time() - 20)))->select('id', 'fundcode')->get();
         if (!empty($dbobj)) {
@@ -594,66 +598,60 @@ class FundController extends Controller
     }
 
     //基金缓存数据更新
-    public function fundtempupdate(Request $request)
+    private function fundtempupdate()
     {
         $cuttimes = 60;
         $nowhour = date('G');
         $nowweek = date('w');
-        if($nowhour>=9 && $nowhour<=14 && $nowweek>0 && $nowweek<6) {
+        if ($nowhour >= 9 && $nowhour <= 14 && $nowweek > 0 && $nowweek < 6) {
             $cuttimes = 20;
         }
-        $reqarr = $request->all();
-        if ('kkkkkk2021QWhERhTYrss' != ($reqarr['key'] ?? '')) {
-            echo '【错误】key不匹配，无法继续执行';
-        } else {
-            ignore_user_abort(true);
-            $start_time = microtime(true);
-            $dbobj = DB::table($this->tablename)->select('fundcode')->groupBy('fundcode')->get();
-            if (!empty($dbobj)) {
-                foreach ($dbobj as $vald) {
-                    $tmp_fundcode = $vald->fundcode ?? '';
-                    if (6 == strlen($tmp_fundcode)) {
-                        //判断更新是否频繁
-                        $datahas = DB::table('x_fundtemp')->where('fundcode', $tmp_fundcode)->first();
-                        if (empty($datahas) || strtotime($datahas->update_datetime??'2000-01-01')<(time()-$cuttimes)) {
-                            $fund_mainurl = 'https://fundgz.1234567.com.cn/js/' . $tmp_fundcode . '.js?rt=' . time() . mt_rand(100, 999);
-                            $res_main = zzget($fund_mainurl);
-                            $resarr_main = json_decode((!empty($res_main) ? substr($res_main, 8, -2) : ''), true);
+        $start_time = microtime(true);
+        $dbobj = DB::table($this->tablename)->select('fundcode')->groupBy('fundcode')->get();
+        if (!empty($dbobj)) {
+            foreach ($dbobj as $vald) {
+                $tmp_fundcode = $vald->fundcode ?? '';
+                if (6 == strlen($tmp_fundcode)) {
+                    //判断更新是否频繁
+                    $datahas = DB::table('x_fundtemp')->where('fundcode', $tmp_fundcode)->first();
+                    if (empty($datahas) || strtotime($datahas->update_datetime ?? '2000-01-01') < (time() - $cuttimes)) {
+                        $fund_mainurl = 'https://fundgz.1234567.com.cn/js/' . $tmp_fundcode . '.js?rt=' . time() . mt_rand(100, 999);
+                        $res_main = zzget($fund_mainurl);
+                        $resarr_main = json_decode((!empty($res_main) ? substr($res_main, 8, -2) : ''), true);
 
-                            $fund_childurl = 'https://fund.eastmoney.com/pingzhongdata/' . $tmp_fundcode . '.js?v=' . date('YmdHis');
-                            $reschild = zzget($fund_childurl);
-                            $tmpa = explode('var Data_ACWorthTrend = ', $reschild, 2);
-                            $tmpb = explode(';', ($tmpa[1] ?? ''), 2);
-                            $resarr_child = json_decode(($tmpb[0] ?? ''), true);
+                        $fund_childurl = 'https://fund.eastmoney.com/pingzhongdata/' . $tmp_fundcode . '.js?v=' . date('YmdHis');
+                        $reschild = zzget($fund_childurl);
+                        $tmpa = explode('var Data_ACWorthTrend = ', $reschild, 2);
+                        $tmpb = explode(';', ($tmpa[1] ?? ''), 2);
+                        $resarr_child = json_decode(($tmpb[0] ?? ''), true);
 
-                            if (!empty($resarr_main) && !empty($resarr_child)) {
-                                $tmpchildarr = [];
-                                foreach ($resarr_child as $valc) {
-                                    $tmpdate    = date('Y-m-d', (round(($valc[0] ?? 0) / 1000)));
-                                    $tmpjingzhi = $valc[1] ?? 0;
-                                    $tmpchildarr[$tmpdate] = $tmpjingzhi;
-                                }
-                                $dbarr = [];
-                                $dbarr['fundcode']    = $tmp_fundcode;
-                                $dbarr['fundname']    = $resarr_main['name'] ?? '';
-                                $dbarr['new_shijian'] = $resarr_main['gztime'] ?? '';
-                                // $dbarr['new_shijian'] = substr(($resarr_main['gztime'] ?? ''), -8);
-                                $dbarr['new_jingzhi'] = $resarr_main['gsz'] ?? '0';
-                                $dbarr['jsonstring']  = json_encode($tmpchildarr);
+                        if (!empty($resarr_main) && !empty($resarr_child)) {
+                            $tmpchildarr = [];
+                            foreach ($resarr_child as $valc) {
+                                $tmpdate    = date('Y-m-d', (round(($valc[0] ?? 0) / 1000)));
+                                $tmpjingzhi = $valc[1] ?? 0;
+                                $tmpchildarr[$tmpdate] = $tmpjingzhi;
+                            }
+                            $dbarr = [];
+                            $dbarr['fundcode']    = $tmp_fundcode;
+                            $dbarr['fundname']    = $resarr_main['name'] ?? '';
+                            $dbarr['new_shijian'] = $resarr_main['gztime'] ?? '';
+                            // $dbarr['new_shijian'] = substr(($resarr_main['gztime'] ?? ''), -8);
+                            $dbarr['new_jingzhi'] = $resarr_main['gsz'] ?? '0';
+                            $dbarr['jsonstring']  = json_encode($tmpchildarr);
 
-                                $checkhas = DB::table('x_fundtemp')->where('fundcode', $tmp_fundcode)->first();
-                                if (!empty($checkhas)) {
-                                    $dbarr['update_datetime'] = date('Y-m-d H:i:s');
-                                    $resupd = DB::table('x_fundtemp')->where('fundcode', $tmp_fundcode)->update($dbarr);
-                                } else {
-                                    $dbarr['create_datetime'] = date('Y-m-d H:i:s');
-                                    $resupd = DB::table('x_fundtemp')->insert($dbarr);
-                                }
+                            $checkhas = DB::table('x_fundtemp')->where('fundcode', $tmp_fundcode)->first();
+                            if (!empty($checkhas)) {
+                                $dbarr['update_datetime'] = date('Y-m-d H:i:s');
+                                $resupd = DB::table('x_fundtemp')->where('fundcode', $tmp_fundcode)->update($dbarr);
                             } else {
+                                $dbarr['create_datetime'] = date('Y-m-d H:i:s');
+                                $resupd = DB::table('x_fundtemp')->insert($dbarr);
                             }
                         } else {
-                            //跳过
                         }
+                    } else {
+                        //跳过
                     }
                 }
             }

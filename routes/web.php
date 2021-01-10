@@ -124,7 +124,6 @@ Route::get('fund_index_update', 'FundController@index_update');
 Route::get('fund_index_update_tabledata', 'FundController@index_update_tabledata');
 Route::get('fundchild_update', 'FundController@childupdate');
 Route::post('fundchild_update_exec', 'FundController@childupdate_exec');
-Route::get('mainchildupdate', 'FundController@mainchildupdate');
-Route::get('fundtempupdate', 'FundController@fundtempupdate');
+Route::get('fund_mainchildupdate', 'FundController@mainchildupdate');
 
 

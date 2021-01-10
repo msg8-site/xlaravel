@@ -1,11 +1,12 @@
 @include('base/basehead')
 <script type="text/javascript">
     $("document").ready(function() {
-        var configurl_table        = '/fund_index_tabledata';
-        var configurl_add          = '/fund_add';
-        var configurl_add_exec     = '/fund_add_exec';
-        var configurl_index_update = '/fund_index_update';
-        var configurl_delete       = '/fund_delete';
+        var configurl_table           = '/fund_index_tabledata';
+        var configurl_add             = '/fund_add';
+        var configurl_add_exec        = '/fund_add_exec';
+        var configurl_index_update    = '/fund_index_update';
+        var configurl_delete          = '/fund_delete';
+        var configurl_mainchildupdate = '/fund_mainchildupdate';
 
         form.render(); //表单渲染
         //表格渲染
@@ -207,6 +208,7 @@
                     curr: 1 //重新从第 1 页开始
                 }
             });
+            $.get(configurl_mainchildupdate);
             //表单提交拦截
             return false;
         });
