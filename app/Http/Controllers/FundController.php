@@ -417,7 +417,6 @@ class FundController extends Controller
         if (true !== ZzAuth::check_auth(__CLASS__, __FUNCTION__, $resmsg)) {
             return cmd(400, $resmsg);
         }
-
         //缓存异步触发
         $this->fundtempupdate();
 
@@ -607,6 +606,7 @@ class FundController extends Controller
             $cuttimes = 20;
         }
         $start_time = microtime(true);
+        $succon = 0;
         $dbobj = DB::table($this->tablename)->select('fundcode')->groupBy('fundcode')->get();
         if (!empty($dbobj)) {
             foreach ($dbobj as $vald) {
@@ -626,6 +626,7 @@ class FundController extends Controller
                         $resarr_child = json_decode(($tmpb[0] ?? ''), true);
 
                         if (!empty($resarr_main) && !empty($resarr_child)) {
+                            ++$succon;
                             $tmpchildarr = [];
                             foreach ($resarr_child as $valc) {
                                 $tmpdate    = date('Y-m-d', (round(($valc[0] ?? 0) / 1000)));
@@ -656,7 +657,7 @@ class FundController extends Controller
                 }
             }
             $haoshitime = round((microtime(true) - $start_time) * 1000);
-            echo '缓存完成，缓存条数：' . count($dbobj) . '，耗时：' . $haoshitime . '毫秒';
+            echo '缓存完成 '.date('Y-m-d H:i:s').'，缓存条数：' . $succon.'/'.count($dbobj) . '，耗时：' . $haoshitime . '毫秒';
         }
     }
 }

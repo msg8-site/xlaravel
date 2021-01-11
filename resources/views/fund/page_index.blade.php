@@ -1,11 +1,11 @@
 @include('base/basehead')
 <script type="text/javascript">
     $("document").ready(function() {
-        var configurl_table           = '/fund_index_tabledata';
-        var configurl_add             = '/fund_add';
-        var configurl_add_exec        = '/fund_add_exec';
-        var configurl_index_update    = '/fund_index_update';
-        var configurl_delete          = '/fund_delete';
+        var configurl_table = '/fund_index_tabledata';
+        var configurl_add = '/fund_add';
+        var configurl_add_exec = '/fund_add_exec';
+        var configurl_index_update = '/fund_index_update';
+        var configurl_delete = '/fund_delete';
         var configurl_mainchildupdate = '/fund_mainchildupdate';
 
         form.render(); //表单渲染
@@ -208,11 +208,25 @@
                     curr: 1 //重新从第 1 页开始
                 }
             });
-            $.get(configurl_mainchildupdate);
+
+            $("#ajaxresmsg").html('缓存中请稍后。。。');
+            $.ajax({
+                type: "GET",
+                async: true,
+                url: configurl_mainchildupdate,
+                success: function(res) {
+                    $("#ajaxresmsg").html(res);
+                },
+                error: function(res) {
+                    $("#ajaxresmsg").html('缓存通讯异常，请稍后重试');
+                },
+                complete: function() {}
+            });
             //表单提交拦截
             return false;
         });
     });
+
 </script>
 <style>
     table tbody tr td .layui-table-cell {
@@ -251,6 +265,7 @@
         </div>
         <script type="text/html" id="lefttoolbar">
             <a class="layui-btn layui-btn-sm layui-btn-normal" lay-event="tabletoolbar_add">添加</a>
+            <span id="ajaxresmsg" style="padding-left:50px;"></span>
         </script>
         <script type="text/html" id="tablelinetoolbar">
             <a class="layui-btn layui-btn-xs layui-btn-normal" lay-event="tablelinetoolbar_update" style="margin-top:12px;margin-bottom:8px;">修改</a>
