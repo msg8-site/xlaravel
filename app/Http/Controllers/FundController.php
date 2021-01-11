@@ -82,15 +82,19 @@ class FundController extends Controller
                 $valb->sumhas_suminout = '累计买入:<br>' . ($valb->sumhas_incount ?? '0') . '份<br>' . ($valb->sumhas_inmoney ?? '0') . '元<br>累计卖出:<br>' . ($valb->sumhas_outcount ?? '0') . '份<br>' . ($valb->sumhas_outmoney ?? '0') . '元';
 
                 $tmparr = json_decode(($valb->jingzhi_zhangdie_jsonstring ?? ''), true);
+                $valb->jingzhi_zhangdie_jsonstring = '';
                 for ($i = 0; $i <= 200; $i++) {
-                    $tmpname = 'zhangdiejingzhi' . $i;
-                    $valb->$tmpname = substr(($tmparr[$i]['thedate'] ?? '00-00'), -8) . '<br>' .
-                        ($tmparr[$i]['jingzhi'] ?? '0') . '<br>' .
-                        ($tmparr[$i]['zhangdie_day'] ?? '0') . '%<br>' .
-                        ($tmparr[$i]['zhangdie_sum'] ?? '0') . '%<br>' .
-                        ($tmparr[$i]['sumcount'] ?? '0') . '份<br>' .
-                        ($tmparr[$i]['summoney'] ?? '0') . '元<br>' .
-                        ($tmparr[$i]['sumprofit'] ?? '0') . '元<br>';
+                    if(in_array($i,[0,1,2,3,4,5,6,10,20,40,60,80,100,120])){
+                        $tmpname = 'zhangdiejingzhi' . $i;
+                        $valb->$tmpname = substr(($tmparr[$i]['thedate'] ?? '00-00'), -8) . '<br>' .
+                            ($tmparr[$i]['jingzhi'] ?? '0') . '<br>' .
+                            ($tmparr[$i]['zhangdie_day'] ?? '0') . '%<br>' .
+                            ($tmparr[$i]['zhangdie_sum'] ?? '0') . '%<br>' .
+                            ($tmparr[$i]['sumcount'] ?? '0') . '份<br>' .
+                            ($tmparr[$i]['summoney'] ?? '0') . '元<br>' .
+                            ($tmparr[$i]['sumprofit'] ?? '0') . '元<br>';
+
+                    }
                 }
             }
 
