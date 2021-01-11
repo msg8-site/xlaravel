@@ -84,7 +84,7 @@ class FundController extends Controller
                 $tmparr = json_decode(($valb->jingzhi_zhangdie_jsonstring ?? ''), true);
                 $valb->jingzhi_zhangdie_jsonstring = '';
                 for ($i = 0; $i <= 200; $i++) {
-                    if(in_array($i,[0,1,2,3,4,5,6,10,20,40,60,80,100,120])){
+                    if (in_array($i, [0, 1, 2, 3, 4, 5, 6, 10, 20, 40, 60, 80, 100, 120])) {
                         $tmpname = 'zhangdiejingzhi' . $i;
                         $valb->$tmpname = substr(($tmparr[$i]['thedate'] ?? '00-00'), -8) . '<br>' .
                             ($tmparr[$i]['jingzhi'] ?? '0') . '<br>' .
@@ -93,7 +93,6 @@ class FundController extends Controller
                             ($tmparr[$i]['sumcount'] ?? '0') . '份<br>' .
                             ($tmparr[$i]['summoney'] ?? '0') . '元<br>' .
                             ($tmparr[$i]['sumprofit'] ?? '0') . '元<br>';
-
                     }
                 }
             }
@@ -661,7 +660,7 @@ class FundController extends Controller
                 }
             }
             $haoshitime = round((microtime(true) - $start_time) * 1000);
-            echo '缓存完成 '.date('Y-m-d H:i:s').'，缓存条数：' . $succon.'/'.count($dbobj) . '，耗时：' . $haoshitime . '毫秒';
+            echo '缓存完成 ' . date('Y-m-d H:i:s') . '，缓存条数：' . $succon . '/' . count($dbobj) . '，耗时：' . $haoshitime . '毫秒';
         }
     }
 }
