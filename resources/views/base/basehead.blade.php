@@ -15,7 +15,7 @@
     <script src="https://cdn.staticfile.org/html5shiv/r29/html5.min.js"></script>
     <script src="https://cdn.staticfile.org/respond.js/1.4.2/respond.min.js"></script>
     <![endif]-->
-    <script src="https://lib.baomitu.com/layui/2.5.7/layui.all.js"></script>
+    <script src="https://lib.baomitu.com/layui/2.5.7/layui.all.min.js"></script>
     <script src="https://lib.baomitu.com/crypto-js/3.1.9/crypto-js.min.js"></script>
     <script src="https://lib.baomitu.com/clipboard.js/2.0.6/clipboard.min.js"></script>
     <script>

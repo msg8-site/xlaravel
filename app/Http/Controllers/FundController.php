@@ -67,12 +67,13 @@ class FundController extends Controller
         }
 
         $DB = DB::table($this->tablename);
+        $DB->where('create_username', session(SESS_USERNAME, ''));
         if ('' != ($reqarr['fundcode'] ?? '')) {
             $DB->where('fundcode', 'like', '%' . ($reqarr['fundcode'] ?? '') . '%');
         }
 
         $dbcount = $DB->count();
-        $dbobj   = $DB->orderBy('id', 'desc')->paginate($reqarr['limit'] ?? 20)->items();
+        $dbobj   = $DB->orderBy('orderbyid', 'desc')->orderBy('id', 'desc')->paginate($reqarr['limit'] ?? 20)->items();
         if (empty($dbobj)) {
             return ['code' => 9, 'msg' => '【错误】数据不存在', 'data' => []];
         } else {
@@ -88,8 +89,8 @@ class FundController extends Controller
                         $tmpname = 'zhangdiejingzhi' . $i;
                         $valb->$tmpname = substr(($tmparr[$i]['thedate'] ?? '00-00'), -8) . '<br>' .
                             ($tmparr[$i]['jingzhi'] ?? '0') . '<br>' .
-                            comm_fundcolor($tmparr[$i]['zhangdie_day'] ?? '0') . '%<br>' .
-                            ($tmparr[$i]['zhangdie_sum'] ?? '0') . '%<br>' .
+                            comm_fundcolor(($tmparr[$i]['zhangdie_day'] ?? '0') . '%') . '<br>' .
+                            '<span style="color:#333;text-decoration: underline #333;">' . ($tmparr[$i]['zhangdie_sum'] ?? '0') . '%</span><br>' .
                             ($tmparr[$i]['sumcount'] ?? '0') . '份<br>' .
                             ($tmparr[$i]['summoney'] ?? '0') . '元<br>' .
                             ($tmparr[$i]['sumprofit'] ?? '0') . '元<br>';
@@ -113,7 +114,7 @@ class FundController extends Controller
         $reqarr = $request->all();
         $resarr = [];
 
-        $maindbobj = DB::table($this->tablename)->where('id', ($reqarr['id'] ?? '0'))->select('id', 'fundcode', 'fundname', 'new_shijian', 'new_jingzhi', 'sumhas_count', 'sumhas_money', 'sumhas_average', 'sumhas_profit')->first();
+        $maindbobj = DB::table($this->tablename)->where('id', ($reqarr['id'] ?? '0'))->where('create_username', session(SESS_USERNAME, ''))->select('id', 'fundcode', 'fundname', 'new_shijian', 'new_jingzhi', 'sumhas_count', 'sumhas_money', 'sumhas_average', 'sumhas_profit')->first();
         if (!empty($maindbobj)) {
             $resarr['maindata'] = get_object_vars($maindbobj);
         }
@@ -207,6 +208,7 @@ class FundController extends Controller
             $dbarr = [];
             $dbarr['fundcode']        = $reqarr['fundcode'] ?? '';
             $dbarr['create_datetime'] = date('Y-m-d H:i:s');
+            $dbarr['create_username'] = session(SESS_USERNAME, '');
 
             $resinid = DB::table($this->tablename)->insertGetId($dbarr);
             if (!$resinid) {
@@ -396,17 +398,52 @@ class FundController extends Controller
         if (empty($olddbobj)) {
             return cmd(400, '【错误】数据不存在，无法删除');
         } else {
-            if ('1' == $olddbobj->status ?? '') {
-                return cmd(400, '【错误】状态为开启的数据不可删除');
+            $resdel = DB::table($this->tablename)->where('id', ($reqarr['id'] ?? 0))->delete();
+            if (!$resdel) {
+                return cmd(400, '【错误】数据删除失败，系统错误');
             } else {
-                $resdel = DB::table($this->tablename)->where('id', ($reqarr['id'] ?? 0))->delete();
-                if (!$resdel) {
-                    return cmd(400, '【错误】数据删除失败，系统错误');
-                } else {
-                    //记录修改日志
-                    ZzAuth::log_cudn('d', __CLASS__, __FUNCTION__, $this->tablename, ($reqarr['id'] ?? 0), ZzAuth::data_tojstr($olddbobj, []));
-                    return cmd(200, '数据删除成功');
-                }
+                //记录修改日志
+                ZzAuth::log_cudn('d', __CLASS__, __FUNCTION__, $this->tablename, ($reqarr['id'] ?? 0), ZzAuth::data_tojstr($olddbobj, []));
+                return cmd(200, '数据删除成功');
+            }
+        }
+    }
+
+    /**
+     * @authcheckname=>主表排序ID修改-执行
+     * @authcheckshow=>2
+     */
+    public function orderbyid_update_exec(Request $request)
+    {
+        if (true !== ZzAuth::check_auth(__CLASS__, __FUNCTION__, $resmsg)) {
+            return cmd(400, $resmsg);
+        }
+        $reqarr = $request->all();
+        $resarr = [];
+
+        $validator = Validator::make($reqarr, [
+            'id' => 'bail|required|integer',
+            'orderbyid' => 'bail|required|integer',
+        ]);
+        if ($validator->fails()) {
+            return cmd(400, '【错误】' . $validator->errors()->all()[0]);
+        }
+        $olddbobj = DB::table($this->tablename)->where('id', ($reqarr['id'] ?? '0'))->first();
+        if (empty($olddbobj)) {
+            return cmd(400, '【错误】数据不存在');
+        } else if (($olddbobj->orderbyid ?? 0) == ($reqarr['orderbyid'] ?? 0)) {
+            return cmd(400, '【错误】数据未改变');
+        } else {
+            $dbarr = [];
+            $dbarr['orderbyid']        = $reqarr['orderbyid'] ?? '100';
+            $dbarr['update_datetime'] = date('Y-m-d H:i:s');
+
+            $resupd = DB::table($this->tablename)->where('id', ($reqarr['id'] ?? 0))->update($dbarr);
+            if (!$resupd) {
+                return cmd(400, '【错误】数据修改失败，系统错误');
+            } else {
+                ZzAuth::log_cudn('u', __CLASS__, __FUNCTION__, $this->tablename, ($reqarr['id'] ?? 0), ZzAuth::data_diff($olddbobj, $dbarr, []));  //记录日志
+                return cmd(200, '数据修改成功');
             }
         }
     }

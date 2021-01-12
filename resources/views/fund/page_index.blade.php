@@ -1,12 +1,13 @@
 @include('base/basehead')
 <script type="text/javascript">
     $("document").ready(function() {
-        var configurl_table           = '/fund_index_tabledata';
-        var configurl_add             = '/fund_add';
-        var configurl_add_exec        = '/fund_add_exec';
-        var configurl_index_update    = '/fund_index_update';
-        var configurl_delete          = '/fund_delete';
-        var configurl_mainchildupdate = '/fund_mainchildupdate';
+        var configurl_table                 = 'fund_index_tabledata';
+        var configurl_add                   = 'fund_add';
+        var configurl_add_exec              = 'fund_add_exec';
+        var configurl_index_update          = 'fund_index_update';
+        var configurl_delete                = 'fund_delete';
+        var configurl_mainchildupdate       = 'fund_mainchildupdate';
+        var configurl_orderbyid_update_exec = 'fund_orderbyid_update_exec';
 
         form.render(); //表单渲染
         //表格渲染
@@ -81,7 +82,8 @@
                 }, {
                     field: 'zhangdiejingzhi10',
                     title: '前10天详细',
-                    width: 99
+                    width: 99,
+                    style: 'background-color:#F5F5FF'
                 }, {
                     field: 'zhangdiejingzhi20',
                     title: '前20天详细',
@@ -114,6 +116,11 @@
                     field: 'update_datetime',
                     title: '修改时间',
                     width: 145
+                }, {
+                    field: 'orderbyid',
+                    title: '倒序ID',
+                    edit: 'text',
+                    width: 100
                 }]
             ]
         });
@@ -132,6 +139,38 @@
                     content: configurl_add + "?configurl_add_exec=" + encodeURIComponent(configurl_add_exec)
                 });
             } else {}
+        });
+        //监听单元格编辑
+        table.on('edit(tablefilter)', function(obj) {
+            $.ajax({
+                type: "POST",
+                async: true,
+                url: configurl_orderbyid_update_exec,
+                data: "id=" + obj.data.id + "&orderbyid=" + obj.value,
+                success: function(res) {
+                    let resc = (typeof res.c == "undefined") ? -1 : res.c;
+                    let resm = (typeof res.m == "undefined") ? '' : res.m;
+                    let resd = (typeof res.d == "undefined") ? {} : res.d;
+                    if (200 == resc) {
+                        xlayer.msg(resm);
+                    } else {
+                        xlayer.alert(resm.replace(/\n/g, "<br>"));
+                    }
+                },
+                error: function(res) {
+                    try {
+                        let resmessage = res.responseJSON.message;
+                        if ('' != resmessage) {
+                            xlayer.alert('<span style="color:red;">【错误】数据请求出错，请稍后重试<br>' + resmessage + '</span>');
+                        }
+                    } catch (error) {
+                        xlayer.alert('<span style="color:red;">【错误】数据请求出错，请稍后重试</span>');
+                    }
+                },
+                complete: function() {
+                    //xlayer.close(iload); //关闭等待加载层
+                }
+            });
         });
 
         //行内工具监听

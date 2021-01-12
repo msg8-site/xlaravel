@@ -74,17 +74,14 @@ function comm_ccoption($chkval = '', $arrc = [], $hassel = true)
     return $optionmy;
 }
 
-function comm_fundcolor($value=0) {
-    if(is_numeric($value)) {
-        if($value>=0) {
-            return '<span style="color:blue">'.$value.'</span>';
-        }else {
-            return '<span style="color:purple">'.$value.'</span>';
-        }
-    }else {
-        return $value;
+//基金涨跌颜色
+function comm_fundcolor($value = 0)
+{
+    if ($value >= 0) {
+        return '<span style="color:blue">' . $value . '</span>';
+    } else {
+        return '<span style="color:red">' . $value . '</span>';
     }
-
 }
 //状态标签封装返回
 function comm_colorspan($status = 0)
@@ -236,7 +233,7 @@ function zzget($url = '', $timeout = 5000, $header = array(), $useragent = 'Mozi
     curl_setopt($curl, CURLOPT_NOSIGNAL, 1);
     curl_setopt($curl, CURLOPT_CONNECTTIMEOUT_MS, $timeout);
     curl_setopt($curl, CURLOPT_TIMEOUT_MS, $timeout);
-    curl_setopt($curl, CURLOPT_RETURNTRANSFER, TRUE); 
+    curl_setopt($curl, CURLOPT_RETURNTRANSFER, TRUE);
     curl_setopt($curl, CURLOPT_HTTP_VERSION, CURL_HTTP_VERSION_1_0);
     if (count($headerArr) > 0) {
         curl_setopt($curl, CURLOPT_HTTPHEADER, $headerArr);

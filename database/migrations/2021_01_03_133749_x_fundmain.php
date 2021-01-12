@@ -34,6 +34,8 @@ class XFundmain extends Migration
                 $table->text('jingzhi_zhangdie_jsonstring')->comment('净值涨跌等json字符串')->nullable();
                 $table->dateTime('create_datetime')->default('2000-01-01 00:00:00')->comment('创建时间');
                 $table->dateTime('update_datetime')->default('2000-01-01 00:00:00')->comment('更新时间');
+                $table->bigInteger('orderbyid')->default('100')->comment('排序规则，desc,默认100');
+                $table->string('create_username', 64)->default('')->comment('数据归属用户名');
             });
         }
     }
