@@ -88,7 +88,7 @@ class FundController extends Controller
                         $tmpname = 'zhangdiejingzhi' . $i;
                         $valb->$tmpname = substr(($tmparr[$i]['thedate'] ?? '00-00'), -8) . '<br>' .
                             ($tmparr[$i]['jingzhi'] ?? '0') . '<br>' .
-                            ($tmparr[$i]['zhangdie_day'] ?? '0') . '%<br>' .
+                            comm_fundcolor($tmparr[$i]['zhangdie_day'] ?? '0') . '%<br>' .
                             ($tmparr[$i]['zhangdie_sum'] ?? '0') . '%<br>' .
                             ($tmparr[$i]['sumcount'] ?? '0') . '份<br>' .
                             ($tmparr[$i]['summoney'] ?? '0') . '元<br>' .

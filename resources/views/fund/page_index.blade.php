@@ -1,11 +1,11 @@
 @include('base/basehead')
 <script type="text/javascript">
     $("document").ready(function() {
-        var configurl_table = '/fund_index_tabledata';
-        var configurl_add = '/fund_add';
-        var configurl_add_exec = '/fund_add_exec';
-        var configurl_index_update = '/fund_index_update';
-        var configurl_delete = '/fund_delete';
+        var configurl_table           = '/fund_index_tabledata';
+        var configurl_add             = '/fund_add';
+        var configurl_add_exec        = '/fund_add_exec';
+        var configurl_index_update    = '/fund_index_update';
+        var configurl_delete          = '/fund_delete';
         var configurl_mainchildupdate = '/fund_mainchildupdate';
 
         form.render(); //表单渲染
@@ -52,7 +52,8 @@
                 }, {
                     field: 'zhangdiejingzhi0',
                     title: '最新0天详细',
-                    width: 99
+                    width: 99,
+                    style: 'background-color:#F5F5FF'
                 }, {
                     field: 'zhangdiejingzhi1',
                     title: '前1天详细',
@@ -193,6 +194,20 @@
             }
         });
 
+        $("#ajaxresmsg").html('缓存中请稍后。。。');
+        $.ajax({
+            type: "GET",
+            async: true,
+            url: configurl_mainchildupdate,
+            success: function(res) {
+                $("#ajaxresmsg").html(res);
+            },
+            error: function(res) {
+                $("#ajaxresmsg").html('缓存通讯异常，请稍后重试');
+            },
+            complete: function() {}
+        });
+
         //表单重置
         form.on('submit(formselectreset)', function(formdata) {
             var field = formdata.field;
@@ -226,7 +241,6 @@
             return false;
         });
     });
-
 </script>
 <style>
     table tbody tr td .layui-table-cell {

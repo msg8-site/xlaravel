@@ -74,6 +74,18 @@ function comm_ccoption($chkval = '', $arrc = [], $hassel = true)
     return $optionmy;
 }
 
+function comm_fundcolor($value=0) {
+    if(is_numeric($value)) {
+        if($value>=0) {
+            return '<span style="color:blue">'.$value.'</span>';
+        }else {
+            return '<span style="color:purple">'.$value.'</span>';
+        }
+    }else {
+        return $value;
+    }
+
+}
 //状态标签封装返回
 function comm_colorspan($status = 0)
 {
