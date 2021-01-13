@@ -639,13 +639,13 @@ class FundController extends Controller
     //基金缓存数据更新
     private function fundtempupdate()
     {
-        $cuttimes = 60;
+        $start_time = microtime(true);
+        $cuttimes = 120;
         $nowhour = date('G');
         $nowweek = date('w');
         if ($nowhour >= 9 && $nowhour <= 14 && $nowweek > 0 && $nowweek < 6) {
-            $cuttimes = 20;
+            $cuttimes = 30;
         }
-        $start_time = microtime(true);
         $succon = 0;
         $dbobj = DB::table($this->tablename)->select('fundcode')->groupBy('fundcode')->get();
         if (!empty($dbobj)) {
@@ -696,8 +696,55 @@ class FundController extends Controller
                     }
                 }
             }
-            $haoshitime = round((microtime(true) - $start_time) * 1000);
-            echo '缓存完成 ' . date('Y-m-d H:i:s') . '，缓存条数：' . $succon . '/' . count($dbobj) . '，耗时：' . $haoshitime . '毫秒';
         }
+
+        //上证缓存数据入库
+        $tmpidname = 'shangzhengzhishushow';
+        $tmptable  = 'x_tmpdata';
+        $tmpdbobj  = DB::table($tmptable)->where('tmpidname', $tmpidname)->first();
+        if (empty($tmpdbobj) || (!empty($tmpdbobj) && (strtotime($tmpdbobj->update_datetime ?? '2000-01-01') < (time() - $cuttimes)))) {
+            //缓存上证指数
+            $shangzhengurl = 'http://push2his.eastmoney.com/api/qt/stock/trends2/get?cb=&secid=1.000001&ut=&fields1=f1%2Cf2%2Cf3%2Cf4%2Cf5%2Cf6%2Cf7%2Cf8%2Cf9%2Cf10%2Cf11&fields2=f51%2Cf53%2Cf56%2Cf58&iscr=0&ndays=1&_=1610345259318';
+            $resshangzheng = zzget($shangzhengurl);
+            $resarr_shangzheng = json_decode(($resshangzheng ?? ''), true);
+            $tmpcc             = last($resarr_shangzheng['data']['trends'] ?? []);
+            $tmpcccarr         = explode(',', $tmpcc);
+            $tmparr = [];
+            $tmparr['pre_lastclose'] = $resarr_shangzheng['data']['preClose'] ?? '0';
+            $tmparr['pre_thedate']   = date('Y-m-d', $resarr_shangzheng['data']['time'] ?? '0');
+            $tmparr['pre_newvalue']  = $tmpcccarr[3] ?? 0;
+            $tmparr['pre_newdate']   = $tmpcccarr[0] ?? '';
+            $tmparr['pre_zhangdie']   = (0 == $tmparr['pre_lastclose']) ? 0 : (round(($tmparr['pre_newvalue'] - $tmparr['pre_lastclose']) / $tmparr['pre_lastclose'], 4) * 100);
+            $tmparr['pre_zhangdieval']   = round(($tmparr['pre_newvalue'] - $tmparr['pre_lastclose']), 2);
+            $showdata = '';
+            if ((date('Y-m-d') == $tmparr['pre_thedate']) && $nowhour >= 9 && $nowhour <= 15) {
+                $showdata .= '<span style="color:blue;">';
+            } else {
+                $showdata .= '<span>';
+            }
+            $showdata .= '上证指数：' . substr($tmparr['pre_newdate'], -11) . '&nbsp;&nbsp;&nbsp;之前：' . $tmparr['pre_lastclose'] . '&nbsp;&nbsp;&nbsp;最新：' . $tmparr['pre_newvalue'] . ' / ' . $tmparr['pre_zhangdieval'] . '&nbsp;&nbsp;&nbsp;涨跌幅：' . $tmparr['pre_zhangdie'] . '%';
+            $showdata .= '</span>';
+            if (!empty($tmpdbobj)) {
+                $dbarr = [];
+                $dbarr['tmpdata']         = $showdata;
+                $dbarr['update_datetime'] = date('Y-m-d H:i:s');
+                DB::table($tmptable)->where('tmpidname', $tmpidname)->update($dbarr);
+            } else {
+                $dbarr = [];
+                $dbarr['tmpidname']       = $tmpidname;
+                $dbarr['tmpdata']         = $showdata;
+                $dbarr['create_datetime'] = date('Y-m-d H:i:s');
+                DB::table($tmptable)->insert($dbarr);
+            }
+        }
+        $newtmpdbobj   = DB::table($tmptable)->where('tmpidname', $tmpidname)->first();
+        if (!empty($newtmpdbobj)) {
+            echo ($newtmpdbobj->tmpdata ?? '') . '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;';
+        }
+
+
+
+        $haoshitime = round((microtime(true) - $start_time) * 1000);
+        echo '缓存完成 ' . date('Y-m-d H:i:s') . '，缓存条数：' . $succon . '/' . count($dbobj) . '，耗时：' . $haoshitime . '毫秒';
     }
 }
