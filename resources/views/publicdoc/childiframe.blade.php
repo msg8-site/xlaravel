@@ -46,5 +46,14 @@
     <iframe name="iframeleft" id="iframeleft" src="publicdoc_leftmenu"></iframe>
     <iframe name="iframeright" id="iframeright" src="publicdoc_rightbody"></iframe>
 
+    <script>
+        var _hmt = _hmt || [];
+        (function() {
+            var hm = document.createElement("script");
+            hm.src = "https://hm.baidu.com/hm.js?2186da26c71fce654d35955cccf5ad67";
+            var s = document.getElementsByTagName("script")[0];
+            s.parentNode.insertBefore(hm, s);
+        })();
+    </script>
 
     @include('base/basefoot')

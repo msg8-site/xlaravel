@@ -4,8 +4,8 @@
         //注意：parent 是 JS 自带的全局对象，可用于操作父页面
         var iframeindex = parent.layer.getFrameIndex(window.name); //获取窗口索引
         // form.render(); //表单渲染
-        
-        if('undefined'==(typeof iframeindex)) {
+
+        if ('undefined' == (typeof iframeindex)) {
             $('#closeIframe').hide();
         }
         $('#closeIframe').click(function() {
@@ -61,5 +61,15 @@
         @endif
 
     </div>
+
+    <script>
+        var _hmt = _hmt || [];
+        (function() {
+            var hm = document.createElement("script");
+            hm.src = "https://hm.baidu.com/hm.js?2186da26c71fce654d35955cccf5ad67";
+            var s = document.getElementsByTagName("script")[0];
+            s.parentNode.insertBefore(hm, s);
+        })();
+    </script>
 
     @include('base/basefoot')
