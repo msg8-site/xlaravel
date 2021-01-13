@@ -43,6 +43,7 @@
             "database/factories"
         ],
         "files": [
+            "app/commconfig.php",
             "app/helpers.php"
          ]
     },
