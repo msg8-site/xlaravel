@@ -51,6 +51,10 @@
                     title: '累计入出',
                     width: 100
                 }, {
+                    field: 'mairugusuan',
+                    title: '预估买入',
+                    width: 100
+                }, {
                     field: 'zhangdiejingzhi0',
                     title: '最新0天详细',
                     width: 99,

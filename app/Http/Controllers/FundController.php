@@ -81,7 +81,6 @@ class FundController extends Controller
                 $valb->idfundcodename = ($valb->id ?? '') . '<br>' . ($valb->fundcode ?? '') . '<br>' . ($valb->fundname ?? '');
                 $valb->sumhas_countmoneyaverageprofit = '累计持有:<br>' . ($valb->sumhas_count ?? '') . '份<br>' . ($valb->sumhas_money ?? '') . '元<br>' . ($valb->sumhas_average ?? '') . '<br>累计盈利:<br>' . ($valb->sumhas_profit ?? '') . '元';
                 $valb->sumhas_suminout = '累计买入:<br>' . ($valb->sumhas_incount ?? '0') . '份<br>' . ($valb->sumhas_inmoney ?? '0') . '元<br>累计卖出:<br>' . ($valb->sumhas_outcount ?? '0') . '份<br>' . ($valb->sumhas_outmoney ?? '0') . '元';
-
                 $tmparr = json_decode(($valb->jingzhi_zhangdie_jsonstring ?? ''), true);
                 $valb->jingzhi_zhangdie_jsonstring = '';
                 for ($i = 0; $i <= 200; $i++) {
@@ -96,6 +95,13 @@ class FundController extends Controller
                             ($tmparr[$i]['sumprofit'] ?? '0') . '元<br>';
                     }
                 }
+                $valb->mairugusuan = '1k：' . round(($valb->new_jingzhi * 1000), 2) . '<br>' .
+                    '2k：' . round(($valb->new_jingzhi * 2000), 2) . '<br>' .
+                    '3k：' . round(($valb->new_jingzhi * 3000), 2) . '<br>' .
+                    '4k：' . round(($valb->new_jingzhi * 4000), 2) . '<br>' .
+                    '5k：' . round(($valb->new_jingzhi * 5000), 2) . '<br>' .
+                    '6k：' . round(($valb->new_jingzhi * 6000), 2) . '<br>' .
+                    '7k：' . round(($valb->new_jingzhi * 7000), 2) . '<br>';
             }
 
             return ['code' => 0, 'msg' => '查询成功', 'count' => $dbcount, 'data' => $dbobj];
