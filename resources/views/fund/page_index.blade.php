@@ -315,6 +315,7 @@
                         <div class="layui-form-item">
                             <button class="layui-btn layui-btn-sm layui-btn-normal" lay-submit="" lay-filter="formselect">查询数据</button>
                             <button type="reset" class="layui-btn layui-btn-sm layui-btn-primary" lay-filter="formselectreset">重置</button>
+                            <a  class="layui-btn layui-btn-sm layui-btn-primary" href="https://touzi.sina.com.cn/public/data" target="_blank">大盘走势</a>
                         </div>
                     </form>
                 </div>
