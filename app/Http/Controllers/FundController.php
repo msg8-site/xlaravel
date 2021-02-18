@@ -713,12 +713,12 @@ class FundController extends Controller
             $shangzhengurl = 'http://push2his.eastmoney.com/api/qt/stock/trends2/get?cb=&secid=1.000001&ut=&fields1=f1%2Cf2%2Cf3%2Cf4%2Cf5%2Cf6%2Cf7%2Cf8%2Cf9%2Cf10%2Cf11&fields2=f51%2Cf53%2Cf56%2Cf58&iscr=0&ndays=1&_=1610345259318';
             $resshangzheng = zzget($shangzhengurl);
             $resarr_shangzheng = json_decode(($resshangzheng ?? ''), true);
-            $tmpcc             = last($resarr_shangzheng['data']['trends'] ?? []);
+            $tmpcc             = end($resarr_shangzheng['data']['trends'] ?? []);
             $tmpcccarr         = explode(',', $tmpcc);
             $tmparr = [];
             $tmparr['pre_lastclose'] = $resarr_shangzheng['data']['preClose'] ?? '0';
             $tmparr['pre_thedate']   = date('Y-m-d', $resarr_shangzheng['data']['time'] ?? '0');
-            $tmparr['pre_newvalue']  = $tmpcccarr[3] ?? 0;
+            $tmparr['pre_newvalue']  = $tmpcccarr[1] ?? 0;
             $tmparr['pre_newdate']   = $tmpcccarr[0] ?? '';
             $tmparr['pre_zhangdie']   = (0 == $tmparr['pre_lastclose']) ? 0 : (round(($tmparr['pre_newvalue'] - $tmparr['pre_lastclose']) / $tmparr['pre_lastclose'], 4) * 100);
             $tmparr['pre_zhangdieval']   = round(($tmparr['pre_newvalue'] - $tmparr['pre_lastclose']), 2);
