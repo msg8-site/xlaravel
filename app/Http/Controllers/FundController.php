@@ -710,10 +710,11 @@ class FundController extends Controller
         $tmpdbobj  = DB::table($tmptable)->where('tmpidname', $tmpidname)->first();
         if (empty($tmpdbobj) || (!empty($tmpdbobj) && (strtotime($tmpdbobj->update_datetime ?? '2000-01-01') < (time() - $cuttimes)))) {
             //缓存上证指数
-            $shangzhengurl = 'http://push2his.eastmoney.com/api/qt/stock/trends2/get?cb=&secid=1.000001&ut=&fields1=f1%2Cf2%2Cf3%2Cf4%2Cf5%2Cf6%2Cf7%2Cf8%2Cf9%2Cf10%2Cf11&fields2=f51%2Cf53%2Cf56%2Cf58&iscr=0&ndays=1&_=1610345259318';
+            $shangzhengurl = 'http://push2his.eastmoney.com/api/qt/stock/trends2/get?cb=&secid=1.000001&ut=&fields1=f1%2Cf2%2Cf3%2Cf4%2Cf5%2Cf6%2Cf7%2Cf8%2Cf9%2Cf10%2Cf11&fields2=f51%2Cf53%2Cf56%2Cf58&iscr=0&ndays=1&_='.time().mt_rand(100,999);
             $resshangzheng = zzget($shangzhengurl);
             $resarr_shangzheng = json_decode(($resshangzheng ?? ''), true);
-            $tmpcc             = end($resarr_shangzheng['data']['trends'] ?? []);
+            $endtmparr         = ($resarr_shangzheng['data']['trends'] ?? []);
+            $tmpcc             = end($endtmparr);
             $tmpcccarr         = explode(',', $tmpcc);
             $tmparr = [];
             $tmparr['pre_lastclose'] = $resarr_shangzheng['data']['preClose'] ?? '0';
